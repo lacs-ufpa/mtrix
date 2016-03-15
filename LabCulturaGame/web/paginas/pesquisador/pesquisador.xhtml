@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <ui:composition template="../layout/geral.xhtml">
+
+        <ui:define name="conteudoCentral">
+
+            <div class="page-wrap">
+
+                <p:panel id="panelCadastro" menuTitle="Experimentos">
+                    <h:form id="form3">
+                        <p:growl id="growl" autoUpdate="true" showDetail="false"/>
+
+                        <p:dataTable id="dtexperimentos" value="#{experimentoMB.experimentosModel}"
+                                     var="experimento" widgetVar="expTable"
+                                     paginator="true" rows="10"
+                                     selection="#{experimentoMB.experimentoSelecionado}"
+                                     rowKey="#{experimento.id}"
+                                     lazy="true"
+                                     selectionMode="single"
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     emptyMessage="Nenhum experimento cadastrado">
+
+                            <p:ajax event="rowSelect" update=":formBtns" />
+                            <p:ajax event="rowUnselect" update=":formBtns" />
+
+                            <f:facet name="header">
+                                <p:outputPanel>
+                                    <h:outputText value="Busca em todos os campos: " style="float: left"/>
+                                    <p:inputText id="globalFilter" onkeyup="PF('expTable').filter()" style="width:150px; float: left" placeholder="Digite aqui"/>
+                                </p:outputPanel>
+                            </f:facet>
+
+                            <f:facet name="header">  
+                                Lista de Experimentos                                
+                                <p:commandButton id="toggler" type="button" value="Filtro de Colunas" style="float:right;" icon="ui-icon-calculator" />
+                                <p:columnToggler datasource="dtexperimentos" trigger="toggler" />
+                            </f:facet>  
+
+                            <p:column headerText="Nome" style="width:10%">  
+                                #{experimento.nome}  
+                            </p:column>  
+
+                            <p:column headerText="Objetivo" style="width:30%">  
+                                #{experimento.objetivo}  
+                            </p:column>   
+
+                            <p:column headerText="Status" style="width:15%">  
+                                #{experimento.status}  
+                            </p:column>   
+
+                            <p:column headerText="Data de Criação" style="width:20%">  
+                                #{experimento.dataCriacao}  
+                            </p:column>   
+
+                            <p:column headerText="Data de Execução" style="width:20%">  
+                                #{experimento.dataExecucao}  
+                            </p:column>   
+
+                        </p:dataTable>
+
+                    </h:form> 
+                </p:panel>
+
+                <h:form id="formBtns">
+                    <p:panel>
+
+                        <p align="center">
+                            <p:commandButton id="viewButton" value="Editar Experimento" icon="ui-icon-search"
+                                             disabled="#{experimentoMB.experimentoSelecionado == null}"
+                                             action="#{navegacaoMB.irTelaEditaExperimento()}"
+                                             actionListener="#{experimentoMB.listarCondicoesEJogadoresExperimento(experimentoMB.experimentoSelecionado)}">
+                            </p:commandButton>
+
+                            <p:spacer/>
+
+                            <p:commandButton id="runButton" value="Executar Experimento" icon="ui-icon-play"
+                                             disabled="#{experimentoMB.experimentoSelecionado == null}"
+                                             action="#{navegacaoMB.irTelaExecutaExperimento()}"
+                                             actionListener="#{controladorExperimentoMB.preparaExecucao(experimentoMB.experimentoSelecionado)}">
+                            </p:commandButton>
+
+                            <p:spacer/>
+
+                            <p:commandButton disabled="#{experimentoMB.experimentoSelecionado == null}" id="copyButton" value="Copiar Experimento"
+                                             onclick="PF('dlg').show()">
+                            </p:commandButton>
+
+                        </p>
+                    </p:panel>
+                </h:form>
+
+                <h:form>
+                    <p:dialog header="Cópia" widgetVar="dlg" resizable="false" width="450" style="background-color: whitesmoke;">
+                        <p align="center">
+                            <h:outputLabel for="name" value="Nome do Experimento:" />
+                            <p:inputText id="name" value="#{experimentoMB.nomeExperimentoCopiado}" label="name" />
+                        </p>
+
+                        <p align="center">
+                            <f:facet name="footer">
+                                <p:commandButton ajax="true" onclick="PF('dlg').close()" value="Copiar" 
+                                                 actionListener="#{experimentoMB.geraCopiaExperimento()}"/>
+                                <p:commandButton value="Cancelar" onclick="PF('dlg').close()"/>
+                            </f:facet> 
+                        </p>
+                    </p:dialog>
+
+                </h:form>
+
+            </div>
+
+        </ui:define>
+
+    </ui:composition>
+</html>

@@ -1,0 +1,499 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      >
+
+
+    <f:view contentType="text/html">
+        <h:head>
+            <link rel="StyleSheet" type="text/css" 
+                  href="#{request.contextPath}/css/m-trix.css" media="screen" />
+
+            <style>
+                #game
+                {
+                    font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+                    width:100%;
+                    border-collapse:collapse;
+                }
+                #game td, #game th 
+                {
+                    font-size:1em;
+                    border:1px solid #98bf21;
+                    padding:3px 7px 2px 7px;
+                }
+
+                .amarelo {
+                    font-size:1.1em;
+                    text-align:center;
+                    background-color:yellow;
+                    color:black;
+                }
+                .vermelho {
+                    font-size:1.1em;
+                    text-align:center;
+                    background-color:#ff0018;
+                    color:black;
+                }
+                .verde {
+                    font-size:1.1em;
+                    text-align:center;
+                    background-color:darkgreen;
+                    color:black;
+                }
+                .azul {
+                    font-size:1.1em;
+                    text-align:center;
+                    background-color:blue;
+                    color:#000000;
+                }
+                .roxo {
+                    font-size:1.1em;
+                    text-align:center;
+                    background-color:darkmagenta;
+                    color:black;
+                }
+                .minhaTabela tr{
+                    height: 15px;
+                }
+
+                .ui-growl-title {
+                    margin-left: -50%;
+                }
+
+                .ui-growl-message p {
+                    margin-left: -50%;
+                }
+
+                div[id="growlForm:growl-pont-indiv_container"] {
+                    right: 50%;
+                    width: 400px;
+                    top: 30%;
+                }
+                
+                div[id="growlForm:growl-pont-indiv_container"] .ui-growl-image-info{
+                    background: url("#{request.contextPath}/img/iconeindividual.png") no-repeat;
+                }
+
+                div[id="growlForm:growl-pont-cul_container"] {
+                    right: 50%;
+                    width: 400px;
+                    top: 50%;
+                }
+                
+                div[id="growlForm:growl-pont-cul_container"] .ui-growl-image-info{
+                    background: url("#{request.contextPath}/img/iconegrupo.png") no-repeat;
+                }
+                
+                div[id="growlForm:growl_container"] {
+                    right:0%;
+                    width:400px;
+                }
+                
+                div[id="growlForm:growl_container"] .ui-growl-message p{
+                    display: none;
+                }
+
+            </style>
+
+            <script src="../js/ion-sound/ion.sound.js"></script>
+            <script src="../js/ion-sound/ion.sound.min.js"></script>
+
+            <script>
+                $(document).ready(function () {
+
+                    $.ionSound({
+                        sounds: [
+                            "beer_can_opening",
+                            "bell_ring",
+                            "branch_break",
+                            "water_droplet_3",
+                            "glass",
+                            "door_bell",
+                            "door_bump",
+                            "light_bulb_breaking",
+                            "pop_cork",
+                            "cd_tray"
+                        ],
+                        path: "../sounds/",
+                        multiPlay: true,
+                        volume: "1.0"
+                    });
+                });
+            </script>
+
+            <script type="text/javascript">
+
+                function handleChatMessage(data) {
+                    showMessage([{name: 'msg', value: data.emissorMsg + ': ' + data.conteudoMensagem}]);
+                    $.ionSound.play("water_droplet_3");
+                }
+                
+                function keepScrollBottom() {
+                    var d = $(".container").get(0);
+                    d.scrollTop = d.scrollHeight;
+                }
+
+                function handleAlert(data) {
+                    if (data === 'NEGATIVA') {
+                        $.ionSound.play("door_bump");
+                    } else if (data === 'POSITIVA') {
+                        $.ionSound.play("door_bell");
+                    } else {
+                        $.ionSound.play("glass");
+                    }
+                }
+
+                function handleAlertCult(data) {
+                    if (data === 'NEGATIVA') {
+                        $.ionSound.play("light_bulb_breaking");
+                    } else if (data === 'POSITIVA') {
+                        $.ionSound.play("bell_ring");
+                    } else {
+                        $.ionSound.play("pop_cork");
+                    }
+                }
+
+                function handleAlertCult(data) {
+                    $.ionSound.play("cd_tray");
+                }
+
+                function handleMessage(facesmessage) {
+                    facesmessage.severity = 'info';
+                    PF('growlPontIndivMensagem').show([facesmessage]);
+                }
+
+                function showGrowlMessageDefault(facesmessage) {
+                    facesmessage.severity = 'info';
+                    PF('growlMessageDefault').show([facesmessage]);
+                }
+
+                function showGrowlPontCult(facesmessage) {
+                    facesmessage.severity = 'info';
+                    PF('growlPontCultMensagem').show([facesmessage]);
+                }
+
+                function showFinalDialog(facesmessage) {
+                    facesmessage.severity = 'info';
+                    PF('finalExp').show();
+                }
+
+                function showRemoveJogadorDialog(facesmessage) {
+                    facesmessage.severity = 'info';
+                    PF('saidaJogador').show();
+                }
+
+            </script> 
+
+        </h:head>
+
+        <h:body>
+
+            <h:form id="growlForm">                
+                <p:growl id="growl-pont-indiv" widgetVar="growlPontIndivMensagem" showDetail="true"/>  
+                <p:growl id="growl-pont-cul" widgetVar="growlPontCultMensagem" showDetail="true"/>  
+                <p:growl id="growl" widgetVar="growlMessageDefault" showSummary="false" showDetail="false"/>  
+            </h:form>
+
+            <p:layout fullPage="true" >
+
+                <!--
+                <p:socket channel="/alertaSonoro" onMessage="handleAlert"/>
+                <p:socket channel="/alertaSonoroCult" onMessage="handleAlertCult"/>
+                -->
+                <p:socket channel="/atualizaGrowlPontCult" onMessage="showGrowlPontCult"></p:socket>
+                <p:socket channel="/atualizaPontuacaoMensagemDefault" onMessage="showGrowlMessageDefault">
+                    <p:ajax event="message" update="basicCarousel"/>
+                </p:socket>
+
+                <p:layoutUnit  id="tabelaCenter" position="center">
+
+                    <h:form id="gameForm">  
+
+                        <p:dataTable styleClass="minhaTabela" rowIndexVar="rowIndex" 
+                                     id="game" rendered="#{tableBean.jogador.ativo}"
+                                     var="linha" rows="10" value="#{tableBean.model}" 
+                                     selection="#{tableBean.selectedLinha}" 
+                                     style="border: 1px solid black;text-align:center;"
+                                     selectionMode="single" rowStyleClass="#{linha.cor}">
+
+                            <p:column  headerText="" style="width:1%;background-color:white">  
+                                <p:outputLabel value="#{linha.posicao}" ></p:outputLabel>
+                            </p:column>  
+
+                            <p:column headerText="A" style="width:1%;height:1%" > 
+
+                                <p:graphicImage  value="/paginas/publico/img/dot.png" rendered="#{linha.a}"  ></p:graphicImage>
+
+                                <p:graphicImage value="/paginas/publico/img/notdot.png" rendered="#{ (!linha.a)and(tableBean.matrizSemCirculo)}  " ></p:graphicImage>
+
+                                <p:graphicImage value="/paginas/publico/img/circledot.png" rendered="#{ (!linha.a)and(tableBean.matrizCirculoVazado)}  " ></p:graphicImage>
+                            </p:column>  
+
+                            <p:column headerText="B" style="width:1%;height:1%">  
+
+                                <p:graphicImage value="/paginas/publico/img/dot.png" rendered="#{linha.b}" ></p:graphicImage>
+
+                                <p:graphicImage value="/paginas/publico/img/notdot.png" rendered="#{ (!linha.b)and(tableBean.matrizSemCirculo)}  " ></p:graphicImage>
+
+                                <p:graphicImage value="/paginas/publico/img/circledot.png" rendered="#{ (!linha.b)and(tableBean.matrizCirculoVazado)}  " ></p:graphicImage>
+
+                            </p:column>  
+
+                            <p:column headerText="C" style="width:1%;height:1%">  
+
+                                <p:graphicImage value="/paginas/publico/img/dot.png" rendered="#{linha.c}" ></p:graphicImage>
+
+                                <p:graphicImage value="/paginas/publico/img/notdot.png" rendered="#{ (!linha.c)and(tableBean.matrizSemCirculo)}  " ></p:graphicImage>
+
+                                <p:graphicImage value="/paginas/publico/img/circledot.png" rendered="#{ (!linha.c)and(tableBean.matrizCirculoVazado)}  " ></p:graphicImage>
+
+                            </p:column>  
+
+                            <p:column headerText="D" style="width:1%;height:1%">  
+
+                                <p:graphicImage value="/paginas/publico/img/dot.png" rendered="#{linha.d}" ></p:graphicImage>
+
+                                <p:graphicImage value="/paginas/publico/img/notdot.png" rendered="#{ (!linha.d)and(tableBean.matrizSemCirculo)}  " ></p:graphicImage>
+
+                                <p:graphicImage value="/paginas/publico/img/circledot.png" rendered="#{ (!linha.d)and(tableBean.matrizCirculoVazado)}  " ></p:graphicImage>
+
+                            </p:column>  
+                            <p:column headerText="E" style="width:1%;height:1%">  
+
+                                <p:graphicImage value="/paginas/publico/img/dot.png" rendered="#{linha.e}" ></p:graphicImage>
+
+                                <p:graphicImage value="/paginas/publico/img/notdot.png" rendered="#{ (!linha.e)and(tableBean.matrizSemCirculo)}  " ></p:graphicImage>
+
+                                <p:graphicImage value="/paginas/publico/img/circledot.png" rendered="#{ (!linha.e)and(tableBean.matrizCirculoVazado)}  " ></p:graphicImage>
+
+
+                            </p:column>  
+                            <p:column headerText="F" style="width:1%;height:1%">  
+
+                                <p:graphicImage value="/paginas/publico/img/dot.png" rendered="#{linha.f}" ></p:graphicImage>
+
+                                <p:graphicImage value="/paginas/publico/img/notdot.png" rendered="#{ (!linha.f)and(tableBean.matrizSemCirculo)}  " ></p:graphicImage>
+
+                                <p:graphicImage value="/paginas/publico/img/circledot.png" rendered="#{ (!linha.f)and(tableBean.matrizCirculoVazado)}  " ></p:graphicImage>
+
+                            </p:column>  
+                            <p:column headerText="G" style="width:1%;height:1%">  
+
+                                <p:graphicImage value="/paginas/publico/img/dot.png" rendered="#{linha.g}" ></p:graphicImage>
+
+                                <p:graphicImage value="/paginas/publico/img/notdot.png" rendered="#{ (!linha.g)and(tableBean.matrizSemCirculo)}  " ></p:graphicImage>
+
+                                <p:graphicImage value="/paginas/publico/img/circledot.png" rendered="#{ (!linha.g)and(tableBean.matrizCirculoVazado)}  " ></p:graphicImage>
+
+                            </p:column>  
+
+                            <p:column headerText="H" style="width:1%;height:1%">  
+
+                                <p:graphicImage value="/paginas/publico/img/dot.png" rendered="#{linha.h}" ></p:graphicImage>
+
+                                <p:graphicImage value="/paginas/publico/img/notdot.png" rendered="#{ (!linha.h)and(tableBean.matrizSemCirculo)}  " ></p:graphicImage>
+
+                                <p:graphicImage value="/paginas/publico/img/circledot.png" rendered="#{ (!linha.h)and(tableBean.matrizCirculoVazado)}  " ></p:graphicImage>
+
+                            </p:column>  
+                            <p:column headerText="I" style="width:1%;height:1%">  
+
+                                <p:graphicImage value="/paginas/publico/img/dot.png" rendered="#{linha.i}" ></p:graphicImage>
+
+                                <p:graphicImage value="/paginas/publico/img/notdot.png" rendered="#{ (!linha.i)and(tableBean.matrizSemCirculo)}  " ></p:graphicImage>
+
+                                <p:graphicImage value="/paginas/publico/img/circledot.png" rendered="#{ (!linha.i)and(tableBean.matrizCirculoVazado)}  " ></p:graphicImage>
+
+                            </p:column>  
+                            <p:column headerText="J" style="width:1%;height:1%">  
+
+                                <p:graphicImage value="/paginas/publico/img/dot.png" rendered="#{linha.j}" ></p:graphicImage>
+
+                                <p:graphicImage value="/paginas/publico/img/notdot.png" rendered="#{ (!linha.j)and(tableBean.matrizSemCirculo)}  " ></p:graphicImage>
+
+                                <p:graphicImage value="/paginas/publico/img/circledot.png" rendered="#{ (!linha.j)and(tableBean.matrizCirculoVazado)}  " ></p:graphicImage>
+
+                            </p:column>  
+
+
+                            <p:column style="background-color:white; width:1%" rendered="#{tableBean.pesquisador == null}">  
+
+                                <p:commandButton disabled="#{!tableBean.jogadaLiberada}" value="Ok" id="selectButton" actionListener="#{tableBean.setSelectedCell(rowIndex)}" action="#{tableBean.saveCurrentRound()}" update=":gameForm">  
+
+                                </p:commandButton>  
+                            </p:column> 
+
+
+                        </p:dataTable>
+
+                    </h:form> 
+
+                    <p:socket channel="/atualizaTable">
+                        <p:ajax event="message" update="gameForm:game"/>
+                    </p:socket>
+
+
+                </p:layoutUnit>
+
+                <p:layoutUnit id="left" position="east" size="270" header="Resultados" resizable="true" closable="false" collapsible="false"
+                              style="text-align:center">
+
+                    <p:socket channel="/atualizaPlacar">
+                        <p:ajax event="message" update="placarForm"/>
+                    </p:socket>
+
+                    <h:form id="placarForm">
+                        <p:panel id="pontuacaoIndividual" header="Individual">  
+                            <h:outputText value="#{tableBean.jogador.pontuacao}" />  
+                        </p:panel>  
+
+                        <p:panel id="pontuacaoGrupo" header="Grupo">  
+                            <h:outputText value="#{tableBean.jogador.pontuacaoCult}" />  
+                        </p:panel>
+
+                        <p:panel id="ultimaJogada" header="Última Escolha" rendered="#{tableBean.experimentoEmExecucao.liberaVisualizarUltimaJogada}">  
+                            <h:outputText value="#{tableBean.ultimoJogador}" />
+                            <br/>
+                            <h:outputText value="#{tableBean.ultimaJogada}" />  
+                        </p:panel>
+
+                        <p:spacer height="2" />
+
+                        <p:commandButton value="CHAT" oncomplete="keepScrollBottom()" onclick="PF('chatDialog').show()" disabled="#{tableBean.verificaStatusChat()}">
+                        </p:commandButton>
+
+                    </h:form>
+
+                    <p:socket channel="/chat" onMessage="handleChatMessage"/>
+
+                    <p:dialog header="Chat" id="chatDialog" widgetVar="chatDialog" 
+                              width="500" height="380" resizable="false" modal="true" 
+                              appendTo="@(body)" style="background-color: whitesmoke;" >  
+
+                        <h:form id="chatForm">
+                            <p:panel >
+                                <h:panelGrid columns="1">
+                                    <h:inputTextarea cols="60" rows="15" styleClass="container" readonly="true" 
+                                                     style="background-color: white" value="#{chatBean.chatMessage}"/>
+
+                                    <h:inputText id="entradaChat" size="60" value="#{chatBean.message}"/>
+
+                                    <p:watermark for="entradaChat" value="Digite aqui mensagem ao chat" id="textChatAjuda" />
+
+                                    <p:spacer height="2" />
+                                    <p:commandButton value="Enviar Mensagem"
+                                                     actionListener="#{chatBean.sendMessage(tableBean.jogador.getNome(),tableBean.jogador.getId(),tableBean.getExperimentoID() )}" 
+                                                     update="entradaChat"></p:commandButton>
+                                    <p:spacer height="2" />                 
+                                    <p:commandButton value="Fechar Chat"
+                                                     onclick="PF('chatDialog').hide()" ></p:commandButton>
+
+                                </h:panelGrid>
+                            </p:panel>
+                            
+                            <p:remoteCommand name="showMessage"
+                                             actionListener="#{chatBean.receiveMessage}" oncomplete="keepScrollBottom()" update="chatForm"></p:remoteCommand>
+
+                        </h:form>
+
+                    </p:dialog>
+
+                </p:layoutUnit>
+
+                <p:layoutUnit id="bottom" position="south" size="150" resizable="true" closable="false" collapsible="false"
+                              style="text-align:center; background-color: white">   
+
+
+                    <p:socket channel="/atualizaPontuacao" onMessage="handleMessage">
+                        <p:ajax event="message" update="basicCarousel"/>
+                    </p:socket>
+
+                    <p:socket channel="/informaEsperaNovoJogador" onMessage="handleMessage"/>
+
+                    <p:carousel numVisible="9" id="basicCarousel" widgetVar="carousel" itemStyle="height:90px;width:150px;" 
+                                value="#{tableBean.jogadoresExperimento}" var="jogador" itemStyleClass="carItem" 
+                                rendered="#{tableBean.experimentoEmExecucao.liberaVisualizarPontosIndivJogador}">  
+                        <f:facet name="header">  
+                            Participantes Ativos
+                        </f:facet>  
+
+                        <h:panelGrid columns="1" style="width:100%; " cellpadding="1">  
+                            <p align="left">
+                                <h:outputText style="font-size: small" value="Nome: #{jogador.username}" />  
+                                <h:outputText style="font-size: small" value="Pontos: #{jogador.pontuacao}" />  
+                                <h:outputText style="font-size: small" value="Linha:  #{jogador.ultimaJogada.linhaSelecionada} " />  
+                                Cor: <span style="height: 20px; width: 30px; #{tableBean.returnBackGroundColor(jogador)}; position: fixed" />  
+                            </p>
+                        </h:panelGrid>  
+
+                    </p:carousel> 
+
+
+                    <p:socket channel="/informaFimExperimento" onMessage="showFinalDialog">
+
+                    </p:socket>
+
+                    <p:dialog closable="false" id="finalExperimento" appendTo="@(body)"
+                              widgetVar="finalExp" width="500" height="200" resizable="false" 
+                              modal="true"  style="background-color: whitesmoke;" >  
+                        <h:form id="form7">
+                            <p:panel >
+                                <h:panelGrid columns="1" >
+
+                                    <h:outputText value="Parabéns !!" style="font-size: large"/>
+                                    <br/>
+                                    <h:outputText value="O jogo foi concluído com sucesso. Muito obrigado por sua colaboração."/>
+                                    <h:outputText value="Até mais! =D"/>
+
+                                    <br/>
+                                    <p align="center">
+                                        <p:commandButton id="finalizaExperimento" value="Finalizar"
+                                                         action="#{navegacaoMB.irTelaFimExperimento()}"></p:commandButton>
+                                    </p>                 
+                                </h:panelGrid>
+                            </p:panel>
+                        </h:form>
+                    </p:dialog>
+
+                    <p:socket channel="/#{tableBean.jogador.username}" onMessage="showRemoveJogadorDialog">
+                    </p:socket>
+
+                    <!-- Dialog avisa quando jogador sair do experimento -->
+
+                    <p:dialog closable="false" id="saidaJogador" appendTo="@(body)"
+                              widgetVar="saidaJogador"
+                              width="500" height="200" resizable="false" modal="true"  style="background-color: whitesmoke;">  
+                        <h:form id="form8">
+                            <p:panel >
+                                <h:panelGrid columns="1" >
+
+                                    <h:outputText value="Parabéns !!" style="font-size: large"/>
+                                    <br/>
+                                    <h:outputText value="Sua participação foi muito importante. Muito obrigado por sua colaboração."/>
+                                    <h:outputText value="Até mais! =D"/>
+
+                                    <br/>
+                                    <p align="center">
+                                        <p:commandButton id="finalizaParticipacao" value="Finalizar"
+                                                         action="#{navegacaoMB.irTelaFimExperimento()}"></p:commandButton>
+                                    </p>                 
+                                </h:panelGrid>
+                            </p:panel>
+                        </h:form>
+                    </p:dialog>
+
+                </p:layoutUnit>
+
+            </p:layout>
+
+        </h:body>	
+
+
+    </f:view>  
+
+</html>

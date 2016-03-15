@@ -1,0 +1,55 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      >
+
+    <f:view contentType="text/html">
+
+        <div id="cabecalho">
+            <div id="menuTopo">
+
+                <h:form id="formMenu">
+                    <p align="left">    
+                        <h:outputText value="Bem-vindo #{pesquisadorMB.pesquisador.nome}!"/>  
+                    </p>
+                    <p:menubar style="background-color: whitesmoke;">
+
+                        <p:submenu label="Sistema" style="background-color: whitesmoke;">
+                            <p:menuitem value="Início" icon="ui-icon-home" action="#{navegacaoMB.voltarInicioPesquisador()}" style="background-color: whitesmoke;" />  
+                            <p:menuitem value="Cadastrar Pesquisador" icon="ui-icon-circle-plus" action="#{navegacaoMB.irTelaCadastroPesquisador()}" actionListener="#{pesquisadorMB.listaPesquisadoresModel()}" style="background-color: whitesmoke;" />
+                            <p:menuitem value="Editar meus dados" icon="ui-icon-search" action="#{navegacaoMB.irTelaEditaPesquisador()}" style="background-color: whitesmoke;" />
+                            <p:menuitem value="Sair" icon="ui-icon-power" action="#{navegacaoMB.irPaginaLogoff()}" style="background-color: whitesmoke;" />  
+                        </p:submenu>
+                        <p:submenu label="Experimento" style="background-color: whitesmoke;">
+                            <p:menuitem value="Cadastrar Experimento" icon="ui-icon-circle-plus" action="#{navegacaoMB.irTelaCadastroExperimento()}" actionListener="#{experimentoMB.listarJogadoresExperimentoNulo()}" style="background-color: whitesmoke;"/>  
+                            <p:menuitem value="Cadastrar Jogador" icon="ui-icon-circle-plus" action="#{navegacaoMB.irTelaCadastraJogador()}" actionListener="#{experimentoMB.listarJogadoresExperimentoNulo()}" style="background-color: whitesmoke;" /> 
+                            <p:menuitem value="Cadastrar Vários Jogadores" icon="ui-icon-circle-plus" action="#{navegacaoMB.irTelaCadastraJogadores()}" style="background-color: whitesmoke;" /> 
+                            <p:menuitem value="Cadastrar Prêmio" icon="ui-icon-circle-plus" action="#{navegacaoMB.irTelaCadastraPremio()}" actionListener="#{premioMB.listaPremios()}" style="background-color: whitesmoke;" />
+                            <p:menuitem value="Visualizar Jogadores" icon="ui-icon-search" action="#{navegacaoMB.irTelaListaJogadores()}" style="background-color: whitesmoke;" />  
+
+                        </p:submenu>
+                        <p:submenu label="Condições" style="background-color: whitesmoke;">
+                            <p:menuitem value="Critério de Pontuação individual" icon="ui-icon-circle-plus" action="#{navegacaoMB.irTelaCadastraPontIndiv()}"  style="background-color: whitesmoke;"/>  
+                            <p:menuitem value="Critério de Pontuação cultural" icon="ui-icon-circle-plus" action="#{navegacaoMB.irTelaCadastraPontCult()}"  style="background-color: whitesmoke;"/>
+                            <p:menuitem value="Cadastrar Condição" icon="ui-icon-circle-plus" action="#{navegacaoMB.irTelaCadastraCondicao()}" style="background-color: whitesmoke;"/>
+                            <p:menuitem value="Todas as Condições" icon="ui-icon-circle-plus" action="#{navegacaoMB.irTelaListaCondicoes()}" style="background-color: whitesmoke;"/>
+                        </p:submenu>
+                        <p:submenu label="Relatórios" style="background-color: whitesmoke;">
+                            <p:menuitem value="Relatório por Jogadas" icon="ui-icon-clipboard" action="#{navegacaoMB.irTelaGeraRelatorioJogadas()}" style="background-color: whitesmoke;"/>
+                            <p:menuitem value="Relatório por Pontuação" icon="ui-icon-clipboard" action="#{navegacaoMB.irTelaGeraRelatorioPontuacaoPorJogadas()}" style="background-color: whitesmoke;"/>  
+                        </p:submenu>
+                        <p:menuitem value="Manual" icon="ui-icon-help" action="#{navegacaoMB.irTelaManual()}"  style="background-color: whitesmoke;"/>
+
+                    </p:menubar>
+                    <p:growl id="growl" autoUpdate="true" showDetail="false"/>
+                </h:form>
+
+            </div>
+
+        </div>
+    </f:view>
+
+</html>

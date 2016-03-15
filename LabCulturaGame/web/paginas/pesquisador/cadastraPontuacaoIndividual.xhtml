@@ -1,0 +1,347 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+
+    <ui:composition template="../layout/geral.xhtml">
+
+        <ui:define name="conteudoCentral">
+
+            <div class="page-wrap">
+                <h:form id="pontIndivForm">
+
+                    <p:growl id="growl" autoUpdate="true" showDetail="true"/>
+
+                    <p:panel id="panel" header="Nova Pontuação Individual" >
+
+                        <h:outputLabel>Se a linha escolhida for de cor </h:outputLabel>
+                        <h:selectOneMenu value="#{pontIndivMB.pontIndiv.corSelecionada}">
+                            <f:selectItems value="#{pontIndivMB.cores}" var="c"
+                                           itemLabel="#{c}" itemValue="#{c}" />
+                        </h:selectOneMenu>
+
+                        <span style="padding-left: 5px"/>
+
+                        <h:selectOneMenu value="#{pontIndivMB.pontIndiv.condicional}">
+                            <f:selectItems value="#{pontIndivMB.condicionais}" var="cond"
+                                           itemLabel="#{cond}" itemValue="#{cond}" />
+                        </h:selectOneMenu>
+
+                        <span style="padding-left: 5px"/>
+
+                        <h:selectOneMenu value="#{pontIndivMB.pontIndiv.linhaSelecionada}">
+                            <f:selectItems value="#{pontIndivMB.linhas}" var="l"
+                                           itemLabel="#{l}" itemValue="#{l}" />
+                        </h:selectOneMenu>
+
+                        <span style="padding-left: 20px"/>
+
+                        <h:outputLabel>A pontuação será:</h:outputLabel>
+
+                        <span style="padding-left:5px"/>
+
+                        <h:selectOneMenu value="#{pontIndivMB.pontIndiv.sinalSelecionado}">
+                            <f:selectItems value="#{pontIndivMB.sinais}" var="s"
+                                           itemLabel="#{s}" itemValue="#{s}" />
+                        </h:selectOneMenu>
+                        
+                        <span style="padding-left: 0;padding-right: 10px"/>
+
+                        <p:inputText id="input-pontuacao" required="true" requiredMessage="É necessário informar o valor da pontuação" 
+                                     size="10" value="#{pontIndivMB.pontIndiv.pontoAcerto}" 
+                                     disabled="#{pontIndivMB.pontVariavelAcertoJogadas == true}"/>
+
+                        <pe:keyFilter for="input-pontuacao" mask="num"/>
+
+                        <br/>
+                        <br/>
+                        <span class="required"><p>ATENÇÃO! se for usar um dos dois tipos abaixo para configuração de pontuação, deixe o formulário visível, do contrário, não irá ser cadastrada a configuração referente aos campos abaixo.</p></span>
+                        <br/>
+                        <p:commandButton id="btn-pont-variavel" disabled="#{pontIndivMB.pontVariavelAcertoJogadas == true}" 
+                                         immediate="true" title="Pontuação variável ?" 
+                                         action="#{pontIndivMB.habilitaPontuacaoIndividual()}" 
+                                         update="painelPontuacaoIndividual btn-acerto-jogadas painel-acertos-jogadas input-pontuacao" 
+                                         value="Pontuação variável incremental?"/>
+
+                        <p:panel id="painelPontuacaoIndividual" visible="#{pontIndivMB.pontVariavel}">
+
+                            <h:outputLabel><h2>Defina quando, quanto e como será o aumento da Pontuação Individual</h2></h:outputLabel>
+                            <br/>
+                            <h:outputLabel value="Quantidade de ciclos: "/>
+                            <p:inputText id="input-ciclos" value="#{pontIndivMB.pontIndiv.ciclos}" disabled="#{pontCultMB.pontVariavel == false}" required="true" requiredMessage="É preciso informar a quantidade de ciclos necessários para acréscimo da pontuação"/>
+                            <p:selectOneRadio id="customRadioPontIndiv" value="#{pontIndivMB.pontIndiv.tipoAcrescimoPont}" layout="custom">
+                                <f:selectItem itemLabel="Fixo" itemValue="FIXA" />
+                                <f:selectItem itemLabel="Aleatório" itemValue="VARIAVEL" />
+                                <f:ajax render="input-fixo"/>
+                                <f:ajax render="input-random1"/>
+                                <f:ajax render="input-random2"/>
+                            </p:selectOneRadio>
+
+                            <h:panelGrid columns="5" cellpadding="2">
+                                <p:radioButton id="opt1" for="customRadioPontIndiv" itemIndex="0" />
+                                <h:outputLabel for="opt1" value="Fixo" />
+                                <p:inputText id="input-fixo" value="#{pontIndivMB.pontIndiv.incrementoPontoAcertoFixo}" disabled="#{pontIndivMB.pontIndiv.tipoAcrescimoPont != 'FIXA' or pontIndivMB.pontVariavelAcertoJogadas == true}"/>
+                                <h:outputText value=""/>
+                                <h:outputText value=""/>
+                                <p:radioButton id="opt2" for="customRadioPontIndiv" itemIndex="1" />
+                                <h:outputLabel for="opt2" value="Aleatório entre: (mínimo)" />
+                                <p:inputText id="input-random1" value="#{pontIndivMB.pontIndiv.minIncrementoPontoAcertoRand}" disabled="#{pontIndivMB.pontIndiv.tipoAcrescimoPont != 'VARIAVEL'}" />
+                                <h:outputText value=" e (máximo)"/>
+                                <p:inputText id="input-random2" value="#{pontIndivMB.pontIndiv.maxIncrementoPontoAcertoRand}" disabled="#{pontIndivMB.pontIndiv.tipoAcrescimoPont != 'VARIAVEL'}" />
+                            </h:panelGrid>
+                            
+                            <pe:keyFilter for="input-ciclos input-fixo input-random1 input-random2" mask="num"/>
+
+                        </p:panel>
+
+                        <p:spacer/>
+                        <br/>
+                        <br/>
+                        <p:commandButton id="btn-acerto-jogadas" disabled="#{pontIndivMB.pontVariavel == true}" immediate="true" 
+                                         title="Pontuação variável após X acertos?" action="#{pontIndivMB.habilitaAcertoJogadas()}" 
+                                         update="painel-acertos-jogadas btn-pont-variavel painelPontuacaoIndividual input-pontuacao" 
+                                         value="Pontuação variável após X acertos?"/>
+
+                        <p:panel id="painel-acertos-jogadas" visible="#{pontIndivMB.pontVariavelAcertoJogadas}">
+
+                            <h:outputLabel><h2>Defina quando, quanto e como será a mudança da pontuação aleatória</h2></h:outputLabel>
+                            <br/>
+                            <h:outputText value="Intervalo que a pontuação poderá assumir: " />
+                            
+                            <h:panelGrid columns="3">
+                                <h:outputText value="Mínimo: "/>
+                                <p:inputText id="input-minimo" value="#{pontIndivMB.pontIndiv.variacaoMinima}" title="Define o menor 
+                                             valor que a pontuação pode assumir, respeitando o valor definido no campo de pontuação no início."/>
+                                <p:tooltip id="tp-output-minimo" for="input-minimo" showEvent="focus" hideEvent="blur" style="background-color: white"/>
+                                <h:outputText value="Máximo: "/>
+                                <p:inputText id="input-maximo" value="#{pontIndivMB.pontIndiv.variacaoMaxima}" title="Define o maior 
+                                             valor que a pontuação pode assumir, respeitando o valor definido no campo de pontuação no início."/>
+                                <p:tooltip id="tp-output-maximo" for="input-maximo" showEvent="focus" hideEvent="blur" style="background-color: white"/>
+                            </h:panelGrid>
+
+                            <p:selectOneRadio id="radio-btn-jogadas-aleatoria" value="#{pontIndivMB.pontIndiv.tipoPontuacaoAleatoria}" layout="custom">
+                                <f:selectItem itemLabel="Fixo" itemValue="FIXA" />
+                                <f:selectItem itemLabel="Aleatório" itemValue="VARIAVEL" />
+                                <f:ajax render="input-fixo-al"/>
+                                <f:ajax render="input-random1-al"/>
+                                <f:ajax render="input-random2-al"/>
+                            </p:selectOneRadio>
+
+                            <h:panelGrid columns="5" cellpadding="2">
+                                <p:radioButton id="option1" for="radio-btn-jogadas-aleatoria" itemIndex="0" />
+                                <h:outputLabel for="option1" value="Por quantidade de rodadas (com acerto) fixo em: " />
+                                <p:inputText id="input-fixo-al" value="#{pontIndivMB.pontIndiv.quantidadeJogadasFixas}" disabled="#{pontIndivMB.pontIndiv.tipoPontuacaoAleatoria != 'FIXA'}"/>
+                                <h:outputText value=""/>
+                                <h:outputText value=""/>
+                                <p:radioButton id="option2" for="radio-btn-jogadas-aleatoria" itemIndex="1" />
+                                <h:outputLabel for="option2" value="Por quantidade de rodadas (com acerto) aleatório entre: (mínimo)" />
+                                <p:inputText id="input-random1-al" value="#{pontIndivMB.pontIndiv.quantidadeMinJogadasAleatorias}" disabled="#{pontIndivMB.pontIndiv.tipoPontuacaoAleatoria != 'VARIAVEL'}" />
+                                <h:outputText value=" e (máximo)"/>
+                                <p:inputText id="input-random2-al" value="#{pontIndivMB.pontIndiv.quantidadeMaxJogadasAleatorias}" disabled="#{pontIndivMB.pontIndiv.tipoPontuacaoAleatoria != 'VARIAVEL'}" />
+                            </h:panelGrid>
+                            
+                            <pe:keyFilter for="input-maximo input-minimo input-fixo-al input-random1-al input-random2-al" mask="num"/>
+
+                        </p:panel>
+
+                        <p:spacer/>
+                        <br/>
+                        <br/>
+                        <br/>
+
+                        <p:panel header="Consequência Verbal">
+
+                            <h:panelGrid columns="2" > 
+
+                                <h:outputLabel value="Positiva: "/>
+                                <h:inputTextarea id="mensagemAtivacao" rows="2" cols="50" value="#{pontIndivMB.pontIndiv.consequenciaVerbalPositiva}"
+                                                 title="Se preenchido, será exibido quando esta regra for satisfeita"/>
+                                <p:tooltip id="tpnome" for="mensagemAtivacao" showEvent="focus" style="background-color: white" hideEvent="blur" />
+                                <br/>
+
+                                <h:outputLabel value="Negativa: "/>
+                                <h:inputTextarea id="mensagemNegativa"  rows="2" cols="50" value="#{pontIndivMB.pontIndiv.consequenciaVerbalNegativa}"
+                                                 title="Se preenchido, será exibido quando esta regra NÃO for satisfeita"/>
+                                <p:tooltip id="tpnegativa" for="mensagemNegativa" showEvent="focus" style="background-color: white" hideEvent="blur" />
+
+                            </h:panelGrid>
+                        </p:panel>
+
+                        <p:spacer/>
+
+                        <p align="center">
+                            <p:commandButton style="alignment-adjust: central" value="Salvar" ajax="false" actionListener="#{pontIndivMB.salvaPontuacaoIndiv()}"/>
+
+                            <p:spacer width="20" />
+                            <p:commandButton id="cancelBtn" icon="ui-icon-cancel"   value="Cancelar" immediate="true"
+                                             action="#{navegacaoMB.voltarInicioPesquisador()}"
+                                             />     
+                        </p>
+
+                    </p:panel>
+
+                </h:form>
+
+                <p:spacer/>
+
+                <h:form id="formLista">
+
+                    <p:dataTable id="pontuacoes" var="pontuacao" value="#{condicaoMB.pontuacoesIndivLazyModel}" 
+                                 paginator="true" 
+                                 rows="5" 
+                                 lazy="true"
+                                 selection="#{condicaoMB.pontuacaoIndividualSelecionada}"
+                                 selectionMode="single"
+                                 rowIndexVar="rowIndex" rowKey="#{pontuacao.id}"
+                                 emptyMessage="Nenhuma Pontuação Individual encontrada."
+                                 style="margin-top: 20px; margin-left: 50px; margin-right: 50px">
+
+                        <f:facet name="header">  
+                            Pontuações Individuais já cadastradas
+                        </f:facet> 
+
+                        <p:column style="width: 8%">
+                            <f:facet name="header"> 
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText style="font-size:small" value="Se a linha for" />  
+                            </p>
+                        </p:column>
+
+                        <p:column style="width: 15%">
+                            <f:facet name="header">  
+                                <h:outputText value="Linha" style="font-size:small" />  
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText style="font-size:small" value="#{pontuacao.linhaSelecionada}" />  
+                            </p>
+                        </p:column>
+
+                        <p:column style="width: 4%">
+                            <f:facet name="header">  
+                                <h:outputText value="" style="font-size:small" />  
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText style="font-size:small"  value="#{pontuacao.condicional}" />  
+                            </p>
+                        </p:column>
+
+                        <p:column style="width: 15%">
+                            <f:facet name="header">  
+                                <h:outputText value="Cor" style="font-size:small" />  
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText style="font-size:small" value="#{pontuacao.corSelecionada}" />  
+                            </p>
+                        </p:column>
+
+                        <p:column style="width: 10%">
+                            <f:facet name="header"> 
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText style="font-size:small"  value="a pontuação será" />  
+                            </p>
+                        </p:column>
+
+                        <p:column style="width: 5%">
+                            <f:facet name="header">  
+                                <h:outputText value="" style="font-size:small"/>  
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText  style="font-size:small" value="#{pontuacao.sinalSelecionado}" />  
+                            </p>
+                        </p:column>
+
+                        <p:column style="width: 10%">
+                            <f:facet name="header">  
+                                <h:outputText value="Pontuação" style="font-size:small" />  
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText  style="font-size:small" value="#{pontuacao.exibePontoAcerto}" />  
+                            </p>
+                        </p:column>
+
+                        <p:column style="width: 8%">
+                            <f:facet name="header"> 
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText  style="font-size:small" value="e do tipo" />  
+                            </p>
+                        </p:column>
+
+                        <p:column style="width: 8%">
+                            <f:facet name="header" >  
+                                <h:outputText value="" />  
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText  style="font-size:small" value="#{pontuacao.pontuacaoFixaOuVariavel}" />  
+                            </p>
+                        </p:column>
+
+                        <f:facet name="footer">
+                            <p:commandButton process="pontuacoes" update=":formLista:pontuacaoDetail" icon="ui-icon-search" value="Ver Detalhes" oncomplete="PF('pontuacaoDialog').show()" />
+                        </f:facet>
+
+                    </p:dataTable>
+
+                    <p:dialog header="Detalhes da Pontuação" style="background-color: white" id="pontuacaoDialog"  
+                              widgetVar="pontuacaoDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                        <p:outputPanel id="pontuacaoDetail" style="text-align:center;">
+                            <p:panel header="Consequência Verbal">
+                                <p:panelGrid columns="2" >
+                                    <h:outputText value="Positiva: " />
+                                    <h:outputText value="#{condicaoMB.pontuacaoIndividualSelecionada.consequenciaVerbalPositiva}" />
+
+                                    <h:outputText value="Negativa: " />
+                                    <h:outputText value="#{condicaoMB.pontuacaoIndividualSelecionada.consequenciaVerbalNegativa}" />
+                                </p:panelGrid>
+                            </p:panel>
+                            <p:panel header="Pontuação com Acréscimo" visible="#{condicaoMB.pontuacaoIndividualSelecionada.tipoAcrescimoPont != null}">
+                                <p:panelGrid columns="2">
+                                    <h:outputText value="Acresce a pontuação a cada: "/>
+                                    <h:outputText value="#{condicaoMB.pontuacaoIndividualSelecionada.ciclos} rodada(s)"/>
+                                    
+                                    <h:outputText value="Soma a pontuação o valor: " rendered="#{condicaoMB.pontuacaoIndividualSelecionada.pontuacaoFixaOuVariavel == 'FIXA'}"/>
+                                    <h:outputText value="#{condicaoMB.pontuacaoIndividualSelecionada.incrementoPontoAcertoFixo} ponto(s)" rendered="#{condicaoMB.pontuacaoIndividualSelecionada.pontuacaoFixaOuVariavel == 'FIXA'}"/>
+                                    
+                                    <h:outputText value="Soma a pontuação um valor entre: " rendered="#{condicaoMB.pontuacaoIndividualSelecionada.pontuacaoFixaOuVariavel == 'VARIAVEL'}"/>
+                                    <h:outputText value="#{condicaoMB.pontuacaoIndividualSelecionada.minIncrementoPontoAcertoRand} e #{condicaoMB.pontuacaoIndividualSelecionada.maxIncrementoPontoAcertoRand} pontos" rendered="#{condicaoMB.pontuacaoIndividualSelecionada.pontuacaoFixaOuVariavel == 'VARIAVEL'}"/>
+                                </p:panelGrid>
+                            </p:panel>
+                            <p:panel header="Pontuação Aleatória" visible="#{condicaoMB.pontuacaoIndividualSelecionada.tipoPontuacaoAleatoria != null}">
+                                <p:panelGrid columns="2">
+                                    <h:outputText value="Tipo de mudança entre cada novo ciclo de pontuação aleatória: "/>
+                                    <h:outputText value="#{condicaoMB.pontuacaoIndividualSelecionada.pontuacaoFixaOuVariavel}"/>
+                                    
+                                    <h:outputText value="Muda pontuação entre: " rendered="#{condicaoMB.pontuacaoIndividualSelecionada.tipoPontuacaoAleatoria == 'VARIAVEL'}"/>
+                                    <h:outputText value="#{condicaoMB.pontuacaoIndividualSelecionada.quantidadeMinJogadasAleatorias} e #{condicaoMB.pontuacaoIndividualSelecionada.quantidadeMaxJogadasAleatorias} rodada(s) com acerto" rendered="#{condicaoMB.pontuacaoIndividualSelecionada.tipoPontuacaoAleatoria == 'VARIAVEL'}"/>
+                                    
+                                    <h:outputText value="Muda pontuação após: " rendered="#{condicaoMB.pontuacaoIndividualSelecionada.tipoPontuacaoAleatoria == 'FIXA'}"/>
+                                    <h:outputText value="#{condicaoMB.pontuacaoIndividualSelecionada.quantidadeJogadasFixas} rodada(s) com acerto" rendered="#{condicaoMB.pontuacaoIndividualSelecionada.tipoPontuacaoAleatoria == 'FIXA'}"/>
+                                    
+                                    <h:outputText value="Com valor de pontuação entre: "/>
+                                    <h:outputText value="#{condicaoMB.pontuacaoIndividualSelecionada.variacaoMinima} e #{condicaoMB.pontuacaoIndividualSelecionada.variacaoMaxima} pontos"/>
+                                </p:panelGrid>
+                            </p:panel>
+                        </p:outputPanel>
+                    </p:dialog>
+
+                </h:form>
+
+                <br/>
+                <br/>
+
+            </div>
+
+        </ui:define>
+
+    </ui:composition>    
+
+</html>

@@ -1,0 +1,129 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+
+/* 
+    Created on : Apr 2, 2014, 7:17:03 PM
+    Author     : Karlena Holanda
+*/
+
+* {
+    padding: 0px;
+    margin: 0px;
+    font-size: 1em;
+}
+
+html, body {
+    height: 100%;
+}
+
+#page {
+    min-height: 100%;
+    position: relative;
+}
+
+.botoes {
+    color:  #359bc6;
+    border: 2px outset;
+    height: 35px;
+    width: 80px;
+    float: center;
+}
+
+.erro{
+    color: red;
+}
+
+.page-wrap {
+    min-height: 80%;
+    margin-bottom: -120px; 
+}
+
+.page-wrap:after {
+    content: "";
+    display: block;
+}
+
+.site-footer, .page-wrap:after {
+    height: 120px; 
+}
+
+.site-footer {
+    width: 100%;
+    background: #359bc6;
+}
+
+.site-footer a {
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.site-footer h4 {
+    color: #FFF;
+    text-align: center;
+    font-size: 9px;
+}
+
+.site-footer table {
+    padding-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.site-footer td {
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+
+.alinha {
+    position: relative;
+    margin-top: 0.5px;
+    margin-left: 2px;
+    margin-right: 0px;
+    height: auto;
+    clear: both;
+    font-weight: bold;
+    font-size: 11px;
+    text-align:justify;
+}
+
+.alinha legend {
+    color: gray;
+    flat:rigth;
+}
+
+.alinha label {
+    float: left;
+    display: block;
+    width: 9em;
+    text-align: right;
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 12px;
+    color: #666;
+
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-top: 5px;
+}
+
+
+span.required  {
+    color: red;
+    font-size: 12px;
+}
+
+div.required {
+    color: red;
+    margin-top: 15px;
+}
+
+.container{
+    width: 80%;
+    max-height: 80%;
+    background-color: white;
+    overflow-y: scroll;
+}

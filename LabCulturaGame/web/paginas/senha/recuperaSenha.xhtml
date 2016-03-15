@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+
+    <ui:composition template="../layout/recuperaSenhaLayout.xhtml">
+
+        <ui:define name="conteudoCentral">
+
+            <p:panel id="recupera" header="Recuperação de Senha" style="margin-left: 30%; margin-right: 30%">
+
+                <h:form id="recuperaSenha">
+                    
+                    <p:growl id="growl" autoUpdate="true" showDetail="false"/>
+
+                    <p align="center">
+                        <p:outputLabel value="Entre com o seu e-mail "/>
+                        <p:inputText id="email" value="#{recuperaSenhaMB.email}"/>                        
+                        
+                    </p>
+                    <p:spacer/>
+                    <p:separator/>
+                    <p:spacer/>
+                    <p align="center">
+                        <p:commandButton value="Enviar" action="#{recuperaSenhaMB.recuperaSenha()}" ajax="false" />                            
+                    </p>
+
+                </h:form>
+
+            </p:panel>
+
+        </ui:define>
+
+    </ui:composition>
+
+</html>

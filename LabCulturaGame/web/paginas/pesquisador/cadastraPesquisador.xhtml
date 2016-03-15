@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <ui:composition template="../layout/geral.xhtml">
+
+        <ui:define name="conteudoCentral">
+
+            <div id="conteudo" class="page-wrap">
+
+                <h:form id="formCadPesq">
+                    <p:growl id="growl" autoUpdate="true" showDetail="false"/>
+
+                    <p:panel id="panel" header="Novo Pesquisador">  
+                        <h:panelGrid columns="3" style="text-align: right">  
+
+                            <h:outputLabel value="(*) Campos Obrigatórios!" style="margin-left: 50px; color: #ff0018"/>
+                            <h:outputLabel value=" " style="margin-left: 50px; color: #ff0018"/>
+
+                            <br/>
+                            <br/>
+
+                            <h:outputLabel for="nome" value="Nome: " style="text-align: center"/>  
+                            <p:inputText id="nome" value="#{pesquisadorMB.pesquisadorManipulado.nome}" required="true" requiredMessage="É necessário informar o nome do jogador" label="Name">  
+                                <f:validateLength minimum="2" />  
+                            </p:inputText>  
+                            <span class="required">*</span>
+
+                            <h:outputLabel for="username" value="Login: " />  
+                            <p:inputText id="username" value="#{pesquisadorMB.pesquisadorManipulado.username}" required="true" requiredMessage="É necessário informar o login" label="Username"> 
+                                <f:validateLength minimum="2" /> 
+                            </p:inputText>
+                            <span class="required">*</span>
+
+                            <h:outputLabel for="pwd1" value="Senha: " />  
+                            <p:password  id="pwd1" value="#{pesquisadorMB.pesquisadorManipulado.password}" match="pwd2" label="Password 1" required="true" requiredMessage="É necessário informar uma senha para efetuar login"/>  
+                            <span class="required">*</span>
+
+                            <h:outputLabel for="pwd2" value="Repita a senha: " />  
+                            <p:password id="pwd2" value="#{pesquisadorMB.pesquisadorManipulado.password}" label="Password 2" required="true" requiredMessage="É necessário informar uma senha para efetuar login"/> 
+                            <span class="required">*</span>
+                            
+                            </h:panelGrid> 
+                            
+                            <p:accordionPanel activeIndex="null" > 
+                            
+                            <p:tab title="Dados adicionais"  >
+                            <h:panelGrid columns="2" style="text-align: right" >  
+
+                            <h:outputLabel for="rua" value="Rua: " />  
+                            <p:inputText id="rua" value="#{pesquisadorMB.contato.rua}" label="Rua"/> 
+
+                            
+
+                            <h:outputLabel for="bairro" value="Bairro: " />  
+                            <p:inputText id="bairro" value="#{pesquisadorMB.contato.bairro}" label="Bairro"/> 
+
+                            
+
+                            <h:outputLabel for="cidade" value="Cidade: " />  
+                            <p:inputText id="cidade" value="#{pesquisadorMB.contato.cidade}" label="Cidade"/> 
+
+                            
+
+                            <h:outputLabel for="cep" value="CEP: " />  
+                            <p:inputText id="cep" value="#{pesquisadorMB.contato.cep}" label="Cep"/>
+
+                            
+
+                            <h:outputLabel for="email1" value="E-mail principal: " />  
+                            <p:inputText id="email1" value="#{pesquisadorMB.contato.email1}" label="Email1"/> 
+
+                            
+
+                            <h:outputLabel for="email2" value="E-mail alternativo: " />  
+                            <p:inputText id="email2" value="#{pesquisadorMB.contato.email2}" label="Email2"/> 
+
+                            
+
+                            <h:outputLabel for="fone1" value="Telefone principal: " />  
+                            <p:inputText id="fone1" value="#{pesquisadorMB.contato.telefone1}" label="Telefone1"/>
+
+                            
+
+                            <h:outputLabel for="fone2" value="Telefone alternativo: " />  
+                            <p:inputText id="fone2" value="#{pesquisadorMB.contato.telefone2}" label="Telefone2"/> 
+                            
+                            </h:panelGrid> 
+                            </p:tab>
+                            </p:accordionPanel>
+
+                        
+                        <br/>
+                        <p align="center">  
+                            <p:commandButton id="saveButton" icon="ui-icon-check"
+                                             value="Salvar"
+                                             action="#{pesquisadorMB.listaPesquisadoresModel()}"
+                                             actionListener="#{pesquisadorMB.cadastraPesquisador()}"
+                                             ajax="false"/>
+
+                            <p:spacer width="20" />
+                            <p:commandButton id="cancelBtn" icon="ui-icon-cancel"   value="Cancelar" immediate="true"
+                                             action="#{navegacaoMB.voltarInicioPesquisador()}"
+                                             />      
+                        </p>      
+
+                    </p:panel>
+
+                </h:form>
+
+                <h:form id="botn">
+                    <p:panel id="panel5" style="margin-top: 3%;margin-left: 10%;margin-right: 10%;">
+                        <p:dataTable value="#{pesquisadorMB.pesquisadoresDataModel}"
+                                     var="pesquisador" 
+                                     lazy="true"
+                                     rowKey="#{pesquisador.id}"
+                                     paginator="true" rows="10"
+                                     emptyMessage="Nenhum pesquisador encontrado."
+                                     >  
+
+                            <f:facet name="header">  
+                                Pesquisadores 
+                            </f:facet> 
+
+                            <p:column>
+                                <f:facet name="header">  
+                                    <h:outputText value="Nome" />  
+                                </f:facet>
+                                <h:outputText value="#{pesquisador.nome}"/>
+                            </p:column>
+                            
+                            <p:column>
+                                <f:facet name="header">  
+                                    <h:outputText value="Login" />  
+                                </f:facet>
+                                <h:outputText value="#{pesquisador.username}"/>
+                            </p:column>
+                                                        
+                            
+                            <p:column>
+                                <f:facet name="header">  
+                                    <h:outputText value="Lattes" />  
+                                </f:facet>
+                                <a target="_blank" href="http://#{pesquisador.lattes}" >
+                                <h:outputText value="#{pesquisador.lattes}"/>
+                                </a>
+                            </p:column>
+
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+
+            </div>
+
+        </ui:define>
+
+    </ui:composition>
+
+</html>

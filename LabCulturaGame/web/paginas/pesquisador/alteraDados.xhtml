@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <ui:composition template="../layout/geral.xhtml">
+
+        <ui:define name="conteudoCentral">
+
+            <div id="conteudo" class="page-wrap">
+
+                <h:form id="formAltPesq">
+                    <p:growl id="growl" autoUpdate="true" showDetail="false"/>
+
+                    <p:panel id="panel" header="Meus Dados">  
+
+                        <br/>
+                        <p:commandLink id="attSenha" value="Para atualizar senha, clique aqui" action="#{navegacaoMB.irPaginaAlteraSenhaPesquisador()}" ignoreAutoUpdate="true" immediate="true"/>
+                        <br/>
+
+                        <h:panelGrid columns="3" style="text-align: right">  
+
+                            <h:outputLabel value="(*) Campos Obrigatórios!" style="margin-left: 50px; color: #ff0018"/>
+                            <h:outputLabel value=" " style="margin-left: 50px; color: #ff0018"/>
+
+                            <br/>
+                            <br/>
+
+                            <h:outputLabel for="login" value="Login: " style="text-align: center"/>  
+                            <p:inputText id="login" value="#{pesquisadorMB.pesquisador.username}" label="Name" disabled="true">  
+                            </p:inputText>  
+                            <span class="required"> </span>
+                            
+                            
+                            <h:outputLabel for="nome" value="Nome: " style="text-align: center"/>  
+                            <p:inputText id="nome" value="#{pesquisadorMB.pesquisador.nome}" required="true" requiredMessage="É necessário informar o nome do jogador" label="Name">  
+                                <f:validateLength minimum="2" />  
+                            </p:inputText>  
+                            <span class="required">*</span>
+
+                            <h:outputLabel for="rua" value="Rua: " />  
+                            <p:inputText id="rua" value="#{pesquisadorMB.contato.rua}" label="Rua"/> 
+
+                            <br/>
+
+                            <h:outputLabel for="bairro" value="Bairro: " />  
+                            <p:inputText id="bairro" value="#{pesquisadorMB.contato.bairro}" label="Bairro"/> 
+
+                            <br/>
+
+                            <h:outputLabel for="cidade" value="Cidade: " />  
+                            <p:inputText id="cidade" value="#{pesquisadorMB.contato.cidade}" label="Cidade"/> 
+
+                            <br/>
+
+                            <h:outputLabel for="cep" value="CEP: " />  
+                            <p:inputText id="cep" value="#{pesquisadorMB.contato.cep}" label="Cep"/>
+
+                            <br/>
+
+                            <h:outputLabel for="email1" value="E-mail principal: " />  
+                            <p:inputText id="email1" value="#{pesquisadorMB.contato.email1}" label="Email1"/> 
+
+                            <br/>
+
+                            <h:outputLabel for="email2" value="E-mail alternativo: " />  
+                            <p:inputText id="email2" value="#{pesquisadorMB.contato.email2}" label="Email2"/> 
+
+                            <br/>
+
+                            <h:outputLabel for="fone1" value="Telefone principal: " />  
+                            <p:inputText id="fone1" value="#{pesquisadorMB.contato.telefone1}" label="Telefone1"/>
+
+                            <br/>
+
+                            <h:outputLabel for="fone2" value="Telefone alternativo: " />  
+                            <p:inputText id="fone2" value="#{pesquisadorMB.contato.telefone2}" label="Telefone2"/> 
+                            <br/>
+                            
+                            <h:outputLabel for="lattes" value="Lattes: " />  
+                            <p:inputText id="lattes" value="#{pesquisadorMB.pesquisador.lattes}" label="Lattes"/> 
+                            <br/>
+                            
+                        </h:panelGrid> 
+                        <br/>
+                        <p align="center">  
+                            <p:commandButton id="saveButton" icon="ui-icon-check"
+                                             value="Salvar"
+                                             actionListener="#{pesquisadorMB.atualizaPesquisador()}"/>
+
+                            <p:spacer width="20" />
+                            <p:commandButton id="cancelBtn" icon="ui-icon-cancel"   value="Cancelar" immediate="true"
+                                             action="#{navegacaoMB.voltarInicioPesquisador()}"
+                                             />      
+                        </p>      
+
+                    </p:panel>
+
+                </h:form>
+
+            </div>
+
+        </ui:define>
+
+    </ui:composition>
+
+</html>

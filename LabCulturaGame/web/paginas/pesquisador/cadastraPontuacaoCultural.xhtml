@@ -1,0 +1,357 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <ui:composition template="../layout/geral.xhtml">
+
+        <ui:define name="conteudoCentral">
+
+
+            <div class="page-wrap">
+                <h:form id="formPontuacaoCult">
+
+                    <p:growl id="growl" autoUpdate="true" showDetail="true"/>
+
+                    <p:panel id="panel" header="Nova Pontuação Cultural">
+
+                        <h:outputLabel>Caso todos escolham linha(s) de cor(es): </h:outputLabel> 
+                        <h:selectOneMenu value="#{pontCultMB.pontCult.coresSelecionadas}">
+                            <f:selectItems value="#{pontCultMB.cores}" var="c"
+                                           itemLabel="#{c}" itemValue="#{c}" />
+                        </h:selectOneMenu>
+
+                        <span style="padding-left: 5px"/>
+
+                        <h:selectOneMenu value="#{pontCultMB.pontCult.condicional}">
+                            <f:selectItems value="#{pontCultMB.condicionais}" var="cond"
+                                           itemLabel="#{cond}" itemValue="#{cond}" />
+                        </h:selectOneMenu>
+
+                        <span style="padding-left: 5px"/>
+
+                        <h:selectOneMenu value="#{pontCultMB.pontCult.linhasSelecionadas}">
+                            <f:selectItems value="#{pontCultMB.linhas}" var="l"
+                                           itemLabel="#{l}" itemValue="#{l}" />
+                        </h:selectOneMenu>
+
+                        <span style="padding-left: 5px"/>
+
+                        <h:outputLabel>A pontuação será:</h:outputLabel>
+
+                        <span style="padding-left: 5px"/>
+
+                        <h:selectOneMenu value="#{pontCultMB.pontCult.sinalSelecionado}">
+                            <f:selectItems value="#{pontCultMB.sinais}" var="s"
+                                           itemLabel="#{s}" itemValue="#{s}" />
+                        </h:selectOneMenu>
+
+                        <span style="padding-left: 0;padding-right: 10px"/>
+
+                        <p:inputText id="input-pontuacao-cult" required="true" requiredMessage="É necessário informar o valor da pontuação"
+                                     size="10" value="#{pontCultMB.pontCult.pontoAcerto}"
+                                     disabled="#{pontCultMB.pontVariavelAcertoJogadas == true}"/>
+
+                        <pe:keyFilter for="input-pontuacao-cult" mask="num"/>
+                        
+                        <br/>
+                        <br/>
+                        <span class="required"><p>ATENÇÃO! se for usar um dos dois tipos abaixo para configuração de pontuação, deixe o formulário visível, do contrário, não irá ser cadastrada a configuração referente aos campos abaixo.</p></span>
+                        <br/>
+                        <p:spacer/>
+                        <p:commandButton id="btn-pont-variavel" disabled="#{pontCultMB.pontVariavelAcertoJogadas == true}" 
+                                         immediate="true" title="Pontuação variável incremental?" 
+                                         action="#{pontCultMB.habilitaPontuacaoCulturalVariavel()}" 
+                                         update="painelPontuacaoCultural btn-acerto-jogadas painel-acertos-jogadas input-pontuacao-cult" 
+                                         value="Pontuação variável incremental?"/>
+
+                        <p:panel id="painelPontuacaoCultural" visible="#{pontCultMB.pontVariavel}">
+
+                            <h:outputLabel><h2>Defina quando, quanto e como será o aumento da Pontuação Cultural</h2></h:outputLabel>
+
+                            <br/>
+
+                            <h:outputLabel value="Quantidade de ciclos: "/>
+                            <p:inputText id="input-ciclos-cult" value="#{pontCultMB.pontCult.ciclos}" disabled="#{pontCultMB.pontVariavel == false}" required="true" requiredMessage="É preciso informar a quantidade de ciclos necessários para acréscimo da pontuação"/>
+
+                            <p:outputPanel id="customPanel" style="margin-bottom:10px">
+                                <p:selectOneRadio id="customRadio" value="#{pontCultMB.pontCult.tipoAcrescimoPont}" layout="custom">
+                                    <f:selectItem itemLabel="Fixo" itemValue="FIXA" />
+                                    <f:selectItem itemLabel="Aleatório" itemValue="VARIAVEL" />
+                                    <f:ajax render="input-fixo-cult"/>
+                                    <f:ajax render="input-random1-cult"/>
+                                    <f:ajax render="input-random2-cult"/>
+                                </p:selectOneRadio>
+
+                                <h:panelGrid columns="5" cellpadding="2">
+                                    <p:radioButton id="opt1" for="customRadio" itemIndex="0" />
+                                    <h:outputLabel for="opt1" value="Fixo" />
+                                    <p:inputText id="input-fixo-cult" value="#{pontCultMB.pontCult.incrementoPontoAcertoFixo}" disabled="#{pontCultMB.pontCult.tipoAcrescimoPont != 'FIXA'}"/>
+                                    <h:outputLabel value=""/>
+                                    <h:outputLabel value=""/>
+
+
+                                    <p:radioButton id="opt2" for="customRadio" itemIndex="1" />
+                                    <h:outputLabel for="opt2" value="Aleatório entre: (mínimo)" />
+                                    <p:inputText id="input-random1-cult" value="#{pontCultMB.pontCult.minIncrementoPontoAcertoRand}" disabled="#{pontCultMB.pontCult.tipoAcrescimoPont != 'VARIAVEL'}" />
+                                    <h:outputText value=" e (máximo)"/>
+                                    <p:inputText id="input-random2-cult" value="#{pontCultMB.pontCult.maxIncrementoPontoAcertoRand}" disabled="#{pontCultMB.pontCult.tipoAcrescimoPont != 'VARIAVEL'}" />
+                                </h:panelGrid>
+                                
+                                <pe:keyFilter for="input-ciclos-cult input-fixo-cult input-random1-cult input-random2-cult" mask="num"/>
+
+                            </p:outputPanel>
+
+                        </p:panel>
+
+                        <p:spacer/>
+                        <br/>
+                        <br/>
+                        <p:commandButton id="btn-acerto-jogadas" disabled="#{pontCultMB.pontVariavel == true}" immediate="true" 
+                                         title="Pontuação variável após X acertos?" action="#{pontCultMB.habilitaAcertoJogadas()}" 
+                                         update="painel-acertos-jogadas btn-pont-variavel painelPontuacaoCultural input-pontuacao-cult" 
+                                         value="Pontuação variável após X acertos?"/>
+
+                        <p:panel id="painel-acertos-jogadas" visible="#{pontCultMB.pontVariavelAcertoJogadas}">
+
+                            <h:outputLabel><h2>Defina quando, quanto e como será a mudança da pontuação aleatória</h2></h:outputLabel>
+                            <br/>
+                            <h:outputText value="Intervalo que a pontuação poderá assumir: " />
+
+                            <h:panelGrid columns="3">
+                                <h:outputText value="Mínimo: "/>
+                                <p:inputText id="input-minimo" disabled="#{pontCultMB.pontVariavel == true}" 
+                                             value="#{pontCultMB.pontCult.variacaoMinima}"
+                                             title="Define o menor valor que a pontuação pode assumir, respeitando o valor definido no campo de pontuação no início."/>
+                                <p:tooltip id="tp-output-minimo" for="input-minimo" showEvent="focus" hideEvent="blur" style="background-color: white"/>
+                                <h:outputText value="Máximo: "/>
+                                <p:inputText id="input-maximo" disabled="#{pontCultMB.pontVariavel == true}" 
+                                             value="#{pontCultMB.pontCult.variacaoMaxima}"
+                                             title="Define o maior valor que a pontuação pode assumir, respeitando o valor definido no campo de pontuação no início."/>
+                                <p:tooltip id="tp-output-maximo" for="input-maximo" showEvent="focus" hideEvent="blur" style="background-color: white"/>
+                            </h:panelGrid>
+
+                            <p:selectOneRadio id="radio-btn-jogadas-aleatoria" value="#{pontCultMB.pontCult.tipoPontuacaoAleatoria}" layout="custom">
+                                <f:selectItem itemLabel="Fixo" itemValue="FIXA" />
+                                <f:selectItem itemLabel="Aleatório" itemValue="VARIAVEL" />
+                                <f:ajax render="input-fixo-al"/>
+                                <f:ajax render="input-random1-al"/>
+                                <f:ajax render="input-random2-al"/>
+                            </p:selectOneRadio>
+
+                            <h:panelGrid columns="5" cellpadding="2">
+                                <p:radioButton id="option1" for="radio-btn-jogadas-aleatoria" itemIndex="0" />
+                                <h:outputLabel for="option1" value="Por quantidade de rodadas (com acerto) fixo em: " />
+                                <p:inputText id="input-fixo-al" value="#{pontCultMB.pontCult.quantidadeJogadasFixas}" disabled="#{pontCultMB.pontCult.tipoPontuacaoAleatoria != 'FIXA' or pontCultMB.pontVariavel == true}"/>
+                                <h:outputText value=""/>
+                                <h:outputText value=""/>
+                                <p:radioButton id="option2" for="radio-btn-jogadas-aleatoria" itemIndex="1" />
+                                <h:outputLabel for="option2" value="Por quantidade de rodadas (com acerto) aleatório entre: (mínimo)" />
+                                <p:inputText id="input-random1-al" value="#{pontCultMB.pontCult.quantidadeMinJogadasAleatorias}" disabled="#{pontCultMB.pontCult.tipoPontuacaoAleatoria != 'VARIAVEL' or pontCultMB.pontVariavel == true}" />
+                                <h:outputText value=" e (máximo)"/>
+                                <p:inputText id="input-random2-al" value="#{pontCultMB.pontCult.quantidadeMaxJogadasAleatorias}" disabled="#{pontCultMB.pontCult.tipoPontuacaoAleatoria != 'VARIAVEL' or pontCultMB.pontVariavel == true}" />
+                            </h:panelGrid>
+                            
+                            <pe:keyFilter for="input-maximo input-minimo input-fixo-al input-random1-al input-random2-al" mask="num"/>
+
+                        </p:panel>
+
+                        <p:spacer/>
+                        <br/>
+                        <br/>
+                        <br/>
+
+                        <p:panel header="Consequência Verbal">
+
+                            <h:panelGrid columns="2" > 
+
+                                <h:outputLabel value="Positiva: "/>
+                                <h:inputTextarea id="mensagemAtivacao" rows="2" cols="50" value="#{pontCultMB.pontCult.consequenciaVerbalPositiva}"
+                                                 title="Se preenchido, será exibido quando esta regra for satisfeita"/>
+                                <p:tooltip id="tpnome" for="mensagemAtivacao" showEvent="focus" style="background-color: white" hideEvent="blur" />
+                                <br/>
+
+                                <h:outputLabel value="Negativa: "/>
+                                <h:inputTextarea id="mensagemNegativa"  rows="2" cols="50" value="#{pontCultMB.pontCult.consequenciaVerbalNegativa}"
+                                                 title="Se preenchido, será exibido quando esta regra NÃO for satisfeita"/>
+                                <p:tooltip id="tpnegativa" for="mensagemNegativa" showEvent="focus" style="background-color: white" hideEvent="blur" />
+
+                            </h:panelGrid>
+                        </p:panel>
+
+
+                        <br/>
+                        <p align="center">
+                            <p:commandButton style="alignment-adjust: central" ajax="false" value="Salvar" actionListener="#{pontCultMB.salvaPontuacaoCultural()}"/>
+
+                            <p:spacer width="20" />
+                            <p:commandButton id="cancelBtn" icon="ui-icon-cancel"   value="Cancelar" immediate="true"
+                                             action="#{navegacaoMB.voltarInicioPesquisador()}"
+                                             />     
+                        </p>    
+
+                    </p:panel>
+
+                </h:form>
+
+                <p:spacer/>
+
+                <h:form id="formPontCult">
+
+                    <p:dataTable id="pontuacoesCult" var="pontuacaocult" value="#{condicaoMB.pontuacoesCultLazyModel}" 
+                                 paginator="true" 
+                                 rows="10" 
+                                 lazy="true"
+                                 selection="#{condicaoMB.pontuacaoCulturalSelecionada}"
+                                 selectionMode="single"
+                                 rowIndexVar="rowIndex" rowKey="#{pontuacaocult.id}"
+                                 emptyMessage="Nenhuma Pontuação Cultural encontrada."
+                                 style="margin-top: 20px; margin-left: 100px; margin-right: 100px">
+
+                        <f:facet name="header">  
+                            Pontuações Culturais cadastradas
+                        </f:facet> 
+
+                        <p:column style="width: 10%">
+                            <f:facet name="header"> 
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText value="Se a linha for" style="font-size:small"  />  
+                            </p>
+                        </p:column>
+
+                        <p:column style="width: 12%">
+                            <f:facet name="header">  
+                                <h:outputText value="Linha" style="font-size:small"  />  
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText value="#{pontuacaocult.linhasSelecionadas}" style="font-size:small"  />  
+                            </p>
+                        </p:column>
+
+                        <p:column style="width: 5%">
+                            <f:facet name="header">  
+                                <h:outputText value="" />  
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText value="#{pontuacaocult.condicional}" style="font-size:small"  />  
+                            </p>
+                        </p:column>
+
+                        <p:column style="width: 12%">
+                            <f:facet name="header">  
+                                <h:outputText value="Cor" style="font-size:small"  />  
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText value="#{pontuacaocult.coresSelecionadas}" style="font-size:small"  />  
+                            </p>
+                        </p:column>
+
+                        <p:column style="width: 10%">
+                            <f:facet name="header"> 
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText value="a pontuação será" style="font-size:small"  />  
+                            </p>
+                        </p:column>
+
+                        <p:column style="width: 5%">
+                            <f:facet name="header">  
+                                <h:outputText value="" />  
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText value="#{pontuacaocult.sinalSelecionado}" />  
+                            </p>
+                        </p:column>
+
+                        <p:column style="width: 8%">
+                            <f:facet name="header" >  
+                                <h:outputText value="Pontuação" style="font-size:small"  />  
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText style="font-size:small"  value="#{pontuacaocult.exibePontoAcerto}" />  
+                            </p>
+                        </p:column>
+
+                        <p:column style="width: 8%">
+                            <f:facet name="header"> 
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText style="font-size:small"  value="e do tipo" />  
+                            </p>
+                        </p:column>
+
+                        <p:column style="width: 8%">
+                            <f:facet name="header" >  
+                                <h:outputText value="" />  
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText value="#{pontuacaocult.pontuacaoFixaOuVariavel}" />  
+                            </p>
+                        </p:column>
+
+                        <f:facet name="footer">
+                            <p:commandButton process="pontuacoesCult" update=":formPontCult:pontuacaoDetail" icon="ui-icon-search" value="Ver Detalhes" oncomplete="PF('pontuacaoDialog').show()" />
+                        </f:facet>
+
+                    </p:dataTable>
+
+                    <p:dialog header="Detalhes da Pontuação" style="background-color: white" id="pontuacaoDialog"  widgetVar="pontuacaoDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                        <p:outputPanel id="pontuacaoDetail" style="text-align:center;">
+
+                            <p:panel header="Consequência Verbal">
+                                <p:panelGrid columns="2" >
+
+                                    <h:outputText value="Positiva: " />
+                                    <h:outputText value="#{condicaoMB.pontuacaoCulturalSelecionada.consequenciaVerbalPositiva}" />
+
+                                    <h:outputText value="Negativa: " />
+                                    <h:outputText value="#{condicaoMB.pontuacaoCulturalSelecionada.consequenciaVerbalNegativa}" />
+
+                                </p:panelGrid>
+
+                            </p:panel>
+                            <p:panel header="Pontuação com Acréscimo" visible="#{condicaoMB.pontuacaoCulturalSelecionada.tipoAcrescimoPont != null}">
+                                <p:panelGrid columns="2">
+                                    <h:outputText value="Acresce a pontuação a cada: "/>
+                                    <h:outputText value="#{condicaoMB.pontuacaoCulturalSelecionada.ciclos} rodada(s)"/>
+                                    
+                                    <h:outputText value="Soma a pontuação o valor: " rendered="#{condicaoMB.pontuacaoCulturalSelecionada.pontuacaoFixaOuVariavel == 'FIXA'}"/>
+                                    <h:outputText value="#{condicaoMB.pontuacaoCulturalSelecionada.incrementoPontoAcertoFixo} ponto(s)" rendered="#{condicaoMB.pontuacaoCulturalSelecionada.pontuacaoFixaOuVariavel == 'FIXA'}"/>
+                                    
+                                    <h:outputText value="Soma a pontuação um valor entre: " rendered="#{condicaoMB.pontuacaoCulturalSelecionada.pontuacaoFixaOuVariavel == 'VARIAVEL'}"/>
+                                    <h:outputText value="#{condicaoMB.pontuacaoCulturalSelecionada.minIncrementoPontoAcertoRand} e #{condicaoMB.pontuacaoCulturalSelecionada.maxIncrementoPontoAcertoRand} pontos" rendered="#{condicaoMB.pontuacaoCulturalSelecionada.pontuacaoFixaOuVariavel == 'VARIAVEL'}"/>
+                                </p:panelGrid>
+                            </p:panel>
+                            <p:panel header="Pontuação Aleatória" visible="#{condicaoMB.pontuacaoCulturalSelecionada.tipoPontuacaoAleatoria != null}">
+                                <p:panelGrid columns="2">
+                                    <h:outputText value="Tipo de mudança entre cada novo ciclo de pontuação aleatória: "/>
+                                    <h:outputText value="#{condicaoMB.pontuacaoCulturalSelecionada.pontuacaoFixaOuVariavel}"/>
+                                    
+                                    <h:outputText value="Muda pontuação entre: " rendered="#{condicaoMB.pontuacaoCulturalSelecionada.tipoPontuacaoAleatoria == 'VARIAVEL'}"/>
+                                    <h:outputText value="#{condicaoMB.pontuacaoCulturalSelecionada.quantidadeMinJogadasAleatorias} e #{condicaoMB.pontuacaoCulturalSelecionada.quantidadeMaxJogadasAleatorias} rodadas com acerto" rendered="#{condicaoMB.pontuacaoCulturalSelecionada.tipoPontuacaoAleatoria == 'VARIAVEL'}"/>
+                                    
+                                    <h:outputText value="Muda pontuação após: " rendered="#{condicaoMB.pontuacaoCulturalSelecionada.tipoPontuacaoAleatoria == 'FIXA'}"/>
+                                    <h:outputText value="#{condicaoMB.pontuacaoCulturalSelecionada.quantidadeJogadasFixas} rodada(s) com acerto" rendered="#{condicaoMB.pontuacaoCulturalSelecionada.tipoPontuacaoAleatoria == 'FIXA'}"/>
+                                    
+                                    <h:outputText value="Com valor de pontuação entre: "/>
+                                    <h:outputText value="#{condicaoMB.pontuacaoCulturalSelecionada.variacaoMinima} e #{condicaoMB.pontuacaoCulturalSelecionada.variacaoMaxima} pontos"/>
+                                </p:panelGrid>
+                            </p:panel>
+                        </p:outputPanel>
+                    </p:dialog>
+
+                </h:form>
+
+                <br/>
+                <br/>
+
+            </div>
+
+        </ui:define>
+
+    </ui:composition>      
+
+</html>

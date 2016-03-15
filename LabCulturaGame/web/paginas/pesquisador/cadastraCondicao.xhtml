@@ -1,0 +1,307 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+
+    <ui:composition template="../layout/geral.xhtml">
+
+        <ui:define name="conteudoCentral">
+
+
+            <div id="conteudo" class="page-wrap">
+                <h:form id="form5">
+
+                    <p:growl id="growl" autoUpdate="true" showDetail="false"/>
+
+                    <p:panel id="panel" header="Nova Condição">  
+                        <h:panelGrid columns="3">  
+                            <h:outputLabel for="nome" value="Nome " />  
+                            <h:inputText id="nome" value="#{condicaoMB.condicao.nome}" size="40" required="true" requiredMessage="O nome da condição é obrigatório" label="Name"/>  
+                            <span class="required">*</span>
+
+                            <h:outputLabel for="objetivo" value="Objetivo" />  
+                            <h:inputTextarea id="objetivo" value="#{condicaoMB.condicao.objetivo}" cols="40"  required="true" requiredMessage="É necessário que se defina o objetivo da condição" label="Objetivo"/> 
+                            <span class="required">*</span>
+
+                        </h:panelGrid>
+
+                        <p:dataTable id="pontuacoes1" var="pontuacaocult" value="#{condicaoMB.pontuacoesCultLazyModel}" 
+                                     paginator="true" 
+                                     rows="10" 
+                                     lazy="true"
+                                     rowIndexVar="rowIndex" rowKey="#{pontuacaocult.id}"
+                                     emptyMessage="Nenhuma Pontuação Cultural encontrada."
+                                     style="margin-top: 20px"
+                                     selection="#{condicaoMB.condicao.listPontCult}">  
+
+                            <f:facet name="header">  
+                                Selecione os criterios de Pontuação Cultural
+                            </f:facet>  
+
+                            <p:column selectionMode="multiple" style="width:2%" >
+                            </p:column>
+
+                            <p:column style="width: 10%">
+                                <f:facet name="header"> 
+                                </f:facet>  
+                                <p align="center">
+                                    <h:outputText value="Se a linha for" />  
+                                </p>
+                            </p:column>
+
+                            <p:column filterBy="#{pontuacaocult.linhasSelecionadas}" filterMatchMode="startsWith" style="width:8%">  
+                                <f:facet name="header">  
+                                    <h:outputText value="Linha" />  
+                                </f:facet>  
+                                <p align="center">
+                                    <h:outputText value="#{pontuacaocult.linhasSelecionadas}" />  
+                                </p>
+                            </p:column>  
+
+                            <p:column style="width:8%">  
+                                <f:facet name="header">  
+                                    <h:outputText value="Condicional" />  
+                                </f:facet>  
+                                <p align="center">
+                                    <h:outputText value="#{pontuacaocult.condicional}" />  
+                                </p>
+                            </p:column>  
+
+                            <p:column filterBy="#{pontuacaocult.coresSelecionadas}" filterMatchMode="startsWith" style="width:8%">  
+                                <f:facet name="header">  
+                                    <h:outputText value="Cor" />  
+                                </f:facet>  
+                                <p align="center">
+                                    <h:outputText value="#{pontuacaocult.coresSelecionadas}" />  
+                                </p>
+                            </p:column>
+
+                            <p:column style="width: 11%">
+                                <f:facet name="header"> 
+                                </f:facet>  
+                                <p align="center">
+                                    <h:outputText value="a pontuação será" />  
+                                </p>
+                            </p:column>
+
+                            <p:column style="width:5%">  
+                                <f:facet name="header">  
+                                    <h:outputText value="Operando" />  
+                                </f:facet>  
+                                <p align="center">
+                                    <h:outputText value="#{pontuacaocult.sinalSelecionado}" />  
+                                </p>
+                            </p:column>
+
+                            <p:column style="width:5%">  
+                                <f:facet name="header" >  
+                                    <h:outputText value="Pontuação" />  
+                                </f:facet>  
+                                <p align="center">
+                                    <h:outputText value="#{pontuacaocult.pontoAcerto}" />  
+                                </p>
+                            </p:column>
+
+                            <p:column style="width: 11%">
+                                <f:facet name="header"> 
+                                </f:facet>  
+                                <p align="center">
+                                    <h:outputText value="e do tipo" />  
+                                </p>
+                            </p:column>
+
+                            <p:column style="width: 5%">
+                                <f:facet name="header" >  
+                                    <h:outputText value="" />  
+                                </f:facet>  
+                                <p align="center">
+                                    <h:outputText value="#{pontuacaocult.pontuacaoFixaOuVariavel}" />  
+                                </p>
+                            </p:column>
+
+                        </p:dataTable> 
+
+                        <p:spacer/>
+
+                        <p:dataTable id="pontuacoes" var="pontuacao" value="#{condicaoMB.pontuacoesIndivLazyModel}" 
+                                     paginator="true" 
+                                     rows="10" 
+                                     lazy="true"
+                                     rowIndexVar="rowIndex" rowKey="#{pontuacao.id}"
+                                     emptyMessage="Nenhuma Pontuação Individual encontrada."
+                                     style="margin-top: 20px"
+                                     selection="#{condicaoMB.condicao.listPontIndiv}">  
+
+                            <f:facet name="header">  
+                                Selecione os criterios de Pontuação Individual
+                            </f:facet>
+
+                            <p:column selectionMode="multiple" style="width:2%" >
+                            </p:column>
+
+                            <p:column style="width: 10%">
+                                <f:facet name="header"> 
+                                </f:facet>  
+                                <p align="center">
+                                    <h:outputText value="Se a linha for" />  
+                                </p>
+                            </p:column>
+
+                            <p:column filterBy="#{pontuacao.linhaSelecionada}" filterMatchMode="startsWith" style="width:8%">  
+                                <f:facet name="header">  
+                                    <h:outputText value="Linha" />  
+                                </f:facet>  
+                                <p align="center">
+                                    <h:outputText value="#{pontuacao.linhaSelecionada}" />  
+                                </p>
+                            </p:column>  
+
+                            <p:column style="width:8%">  
+                                <f:facet name="header">  
+                                    <h:outputText value="Condicional" />  
+                                </f:facet>  
+                                <p align="center">
+                                    <h:outputText value="#{pontuacao.condicional}" />  
+                                </p>
+                            </p:column>  
+
+                            <p:column filterBy="#{pontuacao.corSelecionada}" filterMatchMode="startsWith" style="width:8%">  
+                                <f:facet name="header">  
+                                    <h:outputText value="Cor" />  
+                                </f:facet>  
+                                <p align="center">
+                                    <h:outputText value="#{pontuacao.corSelecionada}" />  
+                                </p>
+                            </p:column>
+
+                            <p:column style="width: 11%">
+                                <f:facet name="header"> 
+                                </f:facet>  
+                                <p align="center">
+                                    <h:outputText value="a pontuação será" />  
+                                </p>
+                            </p:column>
+
+                            <p:column style="width:5%">  
+                                <f:facet name="header">  
+                                    <h:outputText value="Operando" />  
+                                </f:facet>  
+                                <p align="center">
+                                    <h:outputText value="#{pontuacao.sinalSelecionado}" />  
+                                </p>
+                            </p:column>
+
+                            <p:column style="width:5%">  
+                                <f:facet name="header" >  
+                                    <h:outputText value="Pontuação" />  
+                                </f:facet>  
+                                <p align="center">
+                                    <h:outputText value="#{pontuacao.pontoAcerto}" />  
+                                </p>
+                            </p:column>
+
+                            <p:column style="width: 11%">
+                                <f:facet name="header"> 
+                                </f:facet>  
+                                <p align="center">
+                                    <h:outputText value="e do tipo" />  
+                                </p>
+                            </p:column>
+
+                            <p:column style="width: 5%">
+                                <f:facet name="header" >  
+                                    <h:outputText value="" />  
+                                </f:facet>  
+                                <p align="center">
+                                    <h:outputText value="#{pontuacao.pontuacaoFixaOuVariavel}" />  
+                                </p>
+                            </p:column>
+
+                        </p:dataTable>
+
+                        <p:spacer/>
+
+                        <p:panel id="panelFim" header="Critérios de parada da Condição" style="text-align:left;margin-bottom:10px;margin-top: 30px">
+
+                            <p:outputPanel id="customPanel" style="margin-bottom:10px">
+                                <p:selectOneRadio id="customRadio" value="#{condicaoMB.criterio}" layout="custom">
+                                    <f:selectItem itemLabel="Individual" itemValue="INDIVIDUAL" />
+                                    <f:selectItem itemLabel="Cultural" itemValue="CULTURAL" />
+                                    <f:ajax render="inputIndividual"/>
+                                    <f:ajax render="inputCultural"/>
+                                </p:selectOneRadio>
+
+                                <h:panelGrid columns="3" cellpadding="2">
+                                    <p:radioButton id="opt1" for="customRadio" itemIndex="0" />
+                                    <p:outputLabel for="opt1" value="Porcentagem média de acerto individual: " />
+                                    <p:inputText id="inputIndividual" value="#{condicaoMB.condicao.fimPorPorcentAcertoIndiv}" disabled="#{condicaoMB.criterio != 'INDIVIDUAL'}"/>
+
+                                    <p:radioButton id="opt2" for="customRadio" itemIndex="1" />
+                                    <p:outputLabel for="opt2" value="Porcentagem média de acerto cultural: " />
+                                    <p:inputText id="inputCultural" value="#{condicaoMB.condicao.fimPorPorcentAcertoCult}" disabled="#{condicaoMB.criterio != 'CULTURAL'}" />
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel value="Maximo de Ciclos: " />  
+                                    <p:inputText id="fimCiclos" value="#{condicaoMB.condicao.fimPorQuantCiclo}"/>
+                                    <p:outputLabel value="Ultimos X Ciclos: " />  
+                                    <p:inputText id="ultimosXCiclos" value="#{condicaoMB.condicao.ultimosXCiclos}"/>
+                                    <p:outputLabel value="Minimo de Ciclos: " />  
+                                    <p:inputText id="minCiclos" value="#{condicaoMB.condicao.minimoCiclos}"/>
+                                </h:panelGrid>
+
+                            </p:outputPanel>
+
+                            <pe:keyFilter for="fimCiclos ultimosXCiclos minCiclos inputIndividual inputCultural" mask="num"/>
+
+                        </p:panel> 
+
+                        <br/>
+
+                        <p:panel id="panelComplex" header="Complexidade da Condição" style="text-align:left;margin-bottom:10px;margin-top: 30px">
+
+                            <p:outputLabel value="Nível de complexidade "/>
+                            <h:panelGrid columns="3">  
+                                <h:selectOneMenu id ="nivelComplexidade" value="#{condicaoMB.condicao.nivelComplexidade}" required="true" requiredMessage="É necessário que se defina o objetivo da condição">
+                                    <f:selectItem  itemValue="FACIL" itemLabel="Fácil"/>
+                                    <f:selectItem itemValue="MEDIO" itemLabel="Médio"/>
+                                    <f:selectItem itemValue="COMPLEXO" itemLabel="Complexo"/>
+                                </h:selectOneMenu>
+                            </h:panelGrid>
+
+                        </p:panel>
+
+                        <p align="center">
+
+                            <p:commandButton id="saveCondicaoButton"
+                                             value="Salvar"
+                                             ajax="false"
+                                             actionListener="#{condicaoMB.criaCondicao(pesquisadorMB.pesquisador.nome)}"/>
+
+                            <p:spacer width="20" />
+                            <p:commandButton id="cancelBtn" icon="ui-icon-cancel"   value="Cancelar" immediate="true"
+                                             action="#{navegacaoMB.voltarInicioPesquisador()}"
+                                             />    
+
+                        </p>
+
+
+                    </p:panel>
+
+                </h:form>
+
+            </div>
+
+        </ui:define>
+
+    </ui:composition>
+
+
+</html>

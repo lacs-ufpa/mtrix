@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+
+        <h:head>
+            <title> Mtrix </title>
+            <link rel="StyleSheet" type="text/css" 
+                  href="#{request.contextPath}/css/m-trix.css" media="screen" />
+            <p align="center">
+                <p:graphicImage value="/img/imagemmtrix1.png" styleClass="img" /> 
+            </p>
+            <script src="../js/ion-sound/ion.sound.js"></script>
+            <script src="../js/ion-sound/ion.sound.min.js"></script>
+            <link rel="shortcut icon" href="../publico/img/mtrixicon.png"/>
+        </h:head>
+
+        <h:body>
+
+            <f:view>	
+                <div id="wrapper" >
+                    <div id="header">
+                        <ui:insert name="header">
+                            <ui:include src="cabecalho.xhtml" />
+                        </ui:insert>
+                    </div>
+
+                    <div id="conteudoCentral">
+
+                        <ui:insert name="conteudoCentral">
+                            <!-- Páginas definidas dinâmicamente por meio de uma página contendo ui:composite + ui:define -->
+                        </ui:insert>
+
+                    </div>
+
+                    <div id="rodape" >
+                        <ui:insert name="footer">
+                            <ui:include src="rodape.xhtml" />
+                        </ui:insert>
+                    </div>
+                </div>
+            </f:view>
+
+            <!-- Código pro Google Analytics capturar informações de acesso ao site -->
+
+
+        </h:body>
+
+    </f:view>
+
+</html>

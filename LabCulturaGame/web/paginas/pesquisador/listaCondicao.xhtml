@@ -1,0 +1,271 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"          
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <ui:composition template="../layout/geral.xhtml">
+
+        <ui:define name="conteudoCentral">
+
+            <h:form id="form-lista-condicoes">
+
+                <p:panel id="panelLista" header="Todas as Condições" style="margin-bottom:10px;margin-top: 50px">
+
+                    <p:dataTable id="condicoes" var="condicao" value="#{condicaoMB.listarCondicoesModelComExperimentos()}" 
+                                 paginator="true" 
+                                 rows="10"
+                                 style="margin-top: 20px;"
+                                 emptyMessage="Nenhuma Condição foi encontrada">
+
+                        <f:facet name="header">  
+                            Condições 
+                        </f:facet>  
+
+                        <p:column style="width: 10%">  
+                            <f:facet name="header">  
+                                <h:outputText value="Nome" />  
+                            </f:facet> 
+                            <h:outputText value="#{condicao.nome}"/>
+                        </p:column>  
+
+                        <p:column style="width: 20%">  
+                            <f:facet name="header">  
+                                <h:outputText value="Objetivo" />  
+                            </f:facet> 
+                            <h:outputText value="#{condicao.objetivo}"/>
+                        </p:column>  
+
+                        <p:column style="width: 15%"> 
+                            <f:facet name="header">  
+                                <h:outputText value="Utilizada nos Experimentos" />  
+                            </f:facet> 
+                            <h:outputText value="#{condicao.nomesExperimentos}" />
+                        </p:column>  
+
+                        <p:column style="width: 10%"> 
+                            <f:facet name="header">  
+                                <h:outputText value="Complexidade" />  
+                            </f:facet> 
+                            <h:outputText value="#{condicao.nivelComplexidade}" />
+                        </p:column> 
+
+                        <p:column style="width: 12%">  
+                            <f:facet name="header">  
+                                <h:outputText value="Criador" />  
+                            </f:facet>  
+                            <h:outputText value="#{condicao.criador}" />  
+                        </p:column>
+                        <p:column style="width: 10%">  
+                            <f:facet name="header" >  
+                                <h:outputText value="Limites" />  
+                            </f:facet>  
+                            <h:outputText value="#{condicao.limites}" />  
+                        </p:column>
+                        <p:column style="width: 8%">
+                            <p:commandButton update=":form-lista-condicoes:pontuacoesCult :form-lista-condicoes:pontuacoes" actionListener="#{listaPontCondMB.listaPontuacoesPorCondicao(condicao)}" oncomplete="PF('dialog-condicao').show()" icon="ui-icon-search" value="Detalhes">
+                                <f:setPropertyActionListener value="#{condicao}" target="#{condicaoMB.condicaoADetalhar}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+
+                    <br/>
+                    <p align="center">                        
+                        <p:commandButton id="cancelBtn" icon="ui-icon-cancel" value="Voltar" immediate="true"
+                                         action="#{navegacaoMB.voltarInicioPesquisador()}"
+                                         />      
+                    </p> 
+                </p:panel>
+                <p:dialog header="Detalhes da Condição" widgetVar="dialog-condicao" modal="true"
+                          showEffect="fade" hideEffect="fade" resizable="false" style="background-color: white !important">
+                    <p:dataTable id="pontuacoesCult" var="pontuacaocult" value="#{listaPontCondMB.listPontCult}" 
+                                 paginator="true" 
+                                 rows="3"
+                                 emptyMessage="Nenhuma Pontuação Cultural encontrada.">
+
+                        <f:facet name="header">  
+                            Pontuações Culturais presentes na Condição
+                        </f:facet> 
+                        
+                        <p:column style="width: 10%">
+                            <f:facet name="header"> 
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText value="Se a linha for" style="font-size:small"  />  
+                            </p>
+                        </p:column>
+
+                        <p:column style="width: 12%">
+                            <f:facet name="header">  
+                                <h:outputText value="Linha" style="font-size:small"  />  
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText value="#{pontuacaocult.linhasSelecionadas}" style="font-size:small"  />  
+                            </p>
+                        </p:column>
+
+                        <p:column style="width: 5%">
+                            <f:facet name="header">  
+                                <h:outputText value="" />  
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText value="#{pontuacaocult.condicional}" style="font-size:small"  />  
+                            </p>
+                        </p:column>
+
+                        <p:column style="width: 12%">
+                            <f:facet name="header">  
+                                <h:outputText value="Cor" style="font-size:small"  />  
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText value="#{pontuacaocult.coresSelecionadas}" style="font-size:small"  />  
+                            </p>
+                        </p:column>
+                        
+                        <p:column style="width: 10%">
+                            <f:facet name="header"> 
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText value="a pontuação será" style="font-size:small"  />  
+                            </p>
+                        </p:column>
+
+                        <p:column style="width: 5%">
+                            <f:facet name="header">  
+                                <h:outputText value="" />  
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText value="#{pontuacaocult.sinalSelecionado}" />  
+                            </p>
+                        </p:column>
+
+                        <p:column style="width: 8%">
+                            <f:facet name="header" >  
+                                <h:outputText value="Pontuação" style="font-size:small"  />  
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText style="font-size:small"  value="#{pontuacaocult.pontoAcerto}" />  
+                            </p>
+                        </p:column>
+                        
+                        <p:column style="width: 8%">
+                            <f:facet name="header"> 
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText style="font-size:small"  value="e do tipo" />  
+                            </p>
+                        </p:column>
+                        
+                        <p:column style="width: 8%">
+                            <f:facet name="header" >  
+                                <h:outputText value="" />  
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText value="#{pontuacaocult.pontuacaoFixaOuVariavel}" />  
+                            </p>
+                        </p:column>
+                    </p:dataTable>
+                    
+                    <p:spacer/>
+                    
+                    <p:dataTable id="pontuacoes" var="pontuacao" value="#{condicaoMB.condicaoADetalhar.listPontIndiv}" 
+                                 paginator="true" 
+                                 rows="5"
+                                 emptyMessage="Nenhuma Pontuação Individual encontrada.">
+
+                        <f:facet name="header">  
+                            Pontuações Individuais presentes na Condição
+                        </f:facet> 
+
+                        <p:column style="width: 8%">
+                            <f:facet name="header"> 
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText style="font-size:small" value="Se a linha for" />  
+                            </p>
+                        </p:column>
+
+                        <p:column style="width: 15%">
+                            <f:facet name="header">  
+                                <h:outputText value="Linha" style="font-size:small" />  
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText style="font-size:small" value="#{pontuacao.linhaSelecionada}" />  
+                            </p>
+                        </p:column>
+
+                        <p:column style="width: 4%">
+                            <f:facet name="header">  
+                                <h:outputText value="" style="font-size:small" />  
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText style="font-size:small"  value="#{pontuacao.condicional}" />  
+                            </p>
+                        </p:column>
+
+                        <p:column style="width: 15%">
+                            <f:facet name="header">  
+                                <h:outputText value="Cor" style="font-size:small" />  
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText style="font-size:small" value="#{pontuacao.corSelecionada}" />  
+                            </p>
+                        </p:column>
+
+                        <p:column style="width: 10%">
+                            <f:facet name="header"> 
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText style="font-size:small"  value="a pontuação será" />  
+                            </p>
+                        </p:column>
+
+                        <p:column style="width: 5%">
+                            <f:facet name="header">  
+                                <h:outputText value="" style="font-size:small"/>  
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText  style="font-size:small" value="#{pontuacao.sinalSelecionado}" />  
+                            </p>
+                        </p:column>
+
+                        <p:column style="width: 10%">
+                            <f:facet name="header">  
+                                <h:outputText value="Pontuação" style="font-size:small" />  
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText  style="font-size:small" value="#{pontuacao.pontoAcerto}" />  
+                            </p>
+                        </p:column>
+
+                        <p:column style="width: 8%">
+                            <f:facet name="header"> 
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText  style="font-size:small" value="e do tipo" />  
+                            </p>
+                        </p:column>
+
+                        <p:column style="width: 8%">
+                            <f:facet name="header" >  
+                                <h:outputText value="" />  
+                            </f:facet>  
+                            <p align="center">
+                                <h:outputText  style="font-size:small" value="#{pontuacao.pontuacaoFixaOuVariavel}" />  
+                            </p>
+                        </p:column>
+
+                    </p:dataTable>
+
+                </p:dialog>
+
+            </h:form>
+
+        </ui:define>
+
+    </ui:composition>
+
+</html>

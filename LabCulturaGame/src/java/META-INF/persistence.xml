@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence      http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+    <persistence-unit name="mtrix" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <class>br.ufpa.psi.comportamente.labgame.entidades.Autorizacao</class>
+        <class>br.ufpa.psi.comportamente.labgame.entidades.Condicao</class>
+        <class>br.ufpa.psi.comportamente.labgame.entidades.CondicaoExperimento</class>
+        <class>br.ufpa.psi.comportamente.labgame.entidades.Contato</class>
+        <class>br.ufpa.psi.comportamente.labgame.entidades.Experimento</class>
+        <class>br.ufpa.psi.comportamente.labgame.entidades.Jogada</class>
+        <class>br.ufpa.psi.comportamente.labgame.entidades.Jogador</class>
+        <class>br.ufpa.psi.comportamente.labgame.entidades.Mensagem</class>
+        <class>br.ufpa.psi.comportamente.labgame.entidades.Pesquisador</class>
+        <class>br.ufpa.psi.comportamente.labgame.entidades.PontuacaoCultural</class>
+        <class>br.ufpa.psi.comportamente.labgame.entidades.PontuacaoIndividual</class>
+        <class>br.ufpa.psi.comportamente.labgame.entidades.Premio</class>
+        <class>br.ufpa.psi.comportamente.labgame.entidades.Usuario</class>
+        <shared-cache-mode>NONE</shared-cache-mode>
+        <validation-mode>AUTO</validation-mode>
+        <properties>
+            <property name="hibernate.connection.username" value="root"/>
+            <property name="hibernate.connection.password" value="1234"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/mtrix?autoReconnect=true"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+            <property name="hibernate.cache.use_second_level_cache" value="false"/>
+            <property name="hibernate.cache.use_query_cache" value="false"/>
+            <property name="javax.persistence.sharedCache.mode" value="NONE"/>
+            <property name="org.hibernate.cacheable" value="false"/>
+            <property name="connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider"/>
+            <property name="hibernate.c3p0.min_size" value="1"/>
+            <property name="hibernate.c3p0.max_size" value="20"/>
+            <property name="hibernate.c3p0.timeout" value="30"/>
+            <property name="hibernate.c3p0.idle_test_period" value="20"/>
+        </properties>
+    </persistence-unit>
+</persistence>

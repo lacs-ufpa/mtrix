@@ -1,0 +1,88 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <ui:composition template="../layout/geral.xhtml">
+
+        <ui:define name="conteudoCentral">
+
+
+            <div class="page-wrap">
+                <h:form id="form6" enctype="multipart/form-data">
+                    <p:growl id="growl" autoUpdate="true" showDetail="false"/>
+
+                    <p:panel id="panel" header="Novo Prêmio">  
+                        <h:panelGrid columns="3" >  
+
+                            <h:outputLabel value="(*) Campos Obrigatórios!" style="margin-left: 50px; color: #ff0018"/>
+                            <h:outputLabel value=" " style="margin-left: 50px; color: #ff0018"/>
+
+                            <br/>
+
+                            <h:outputLabel for="tipo" value="Tipo: "/>  
+                            <p:inputText style="position: initial" id="tipo" value="#{premioMB.premio.tipo}" required="true" requiredMessage="É necessário informar o tipo da premiação" label="Tipo">  
+                                <f:validateLength minimum="2" />  
+                            </p:inputText>  
+                            <span class="required">*</span>
+
+                            <h:outputLabel value="Imagem: "/>
+                            <p:fileUpload  fileUploadListener="#{premioMB.uploadImagemPremio}" sizeLimit="10000000" fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" mode="advanced"
+                                           label="Escolher arquivo para enviar" invalidFileMessage="Tipo de Arquivo inválido" 
+                                           invalidSizeMessage="Arquivo com tamanho acima do permitido" fileLimitMessage="É possivel enviar somente um Arquivo" 
+                                           cancelLabel="Cancelar" dragDropSupport="false" requiredMessage="Campo IMAGEM obrigatório!" update="growl" />
+                        </h:panelGrid> 
+                        <br/>
+                        <p align="center">  
+                            <p:commandButton id="saveButton" icon="ui-icon-check"
+                                             value="Salvar"
+                                             ajax="false"
+                                             action="#{premioMB.cadastraPremio()}"/>
+
+                            <p:spacer width="20" />
+                            <p:commandButton id="cancelBtn" icon="ui-icon-cancel"   value="Cancelar" immediate="true"
+                                             action="#{navegacaoMB.voltarInicioPesquisador()}"
+                                             />      
+                        </p>      
+
+                    </p:panel>
+
+                </h:form>
+
+                <h:form id="btn">
+                    <p:panel id="panel2" style="margin-top: 3%;margin-left: 10%;margin-right: 10%;">
+                        <p:dataTable value="#{premioMB.premios}"
+                                     var="premio" 
+                                     paginator="true" rows="10"
+                                     emptyMessage="Nenhum Prêmio encontrado.">  
+
+                            <f:facet name="header">  
+                                Prêmios Cadastrados  
+                            </f:facet>   
+
+                            <p:column filterBy="tipo" filterMatchMode="contains" headerText="Tipo" style="width:10%">  
+                                #{premio.tipo}  
+                            </p:column>   
+
+                            <p:column headerText="Imagem" style="width:10%">  
+                                <p:graphicImage value="#{premioMB.imagem}">
+                                    <f:param name="premioId" value="#{premio.id}" />
+                                </p:graphicImage> 
+                            </p:column>   
+
+                        </p:dataTable> 
+
+                    </p:panel>
+
+                </h:form>
+
+
+            </div>
+
+        </ui:define>
+
+    </ui:composition>
+
+</html>

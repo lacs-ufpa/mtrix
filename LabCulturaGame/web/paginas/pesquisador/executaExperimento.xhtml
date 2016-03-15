@@ -1,0 +1,239 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      >
+
+    <ui:composition template="../layout/geral.xhtml">
+
+        <ui:define name="conteudoCentral"> 
+
+            <script>
+                $(document).ready(function () {
+
+                    $.ionSound({
+                        sounds: [
+                            "beer_can_opening",
+                            "bell_ring",
+                            "branch_break",
+                            "water_droplet_3"
+                        ],
+                        path: "../sounds/",
+                        multiPlay: true,
+                        volume: "1.0"
+                    });
+                });
+            </script>
+
+            <script type="text/javascript">
+                function handleMessage(facesmessage) {
+                    facesmessage.severity = 'info';
+
+                    PF('growl').show([facesmessage]);
+
+                }
+
+                function handleMessage2(facesmessage) {
+                    facesmessage.severity = 'info';
+
+                    PF('growl').show([facesmessage]);
+
+                }
+
+                function handleChatMessage(data) {
+                    showMessage([{name: 'msg', value: data.emissorMsg + ': ' + data.conteudoMensagem}]);
+                    $.ionSound.play("water_droplet_3");
+                }
+
+                function keepScrollBottom() {
+                    var d = $(".container").get(0);
+                    d.scrollTop = d.scrollHeight;
+                }
+            </script>
+
+            <div class="page-wrap">
+
+                <p:socket  id="atualizaExp" channel="/atualizarExperimento" onMessage="handleMessage2">
+                    <p:ajax event="message" update="panelUltJogadas"/>
+                </p:socket>
+                <p:socket  id="atualizaCond" channel="/atualizarCondicao" onMessage="handleMessage">
+                    <p:ajax event="message" update="panelExperimento"/>
+                </p:socket>
+                <p:socket id="atualizaUltJogadas" channel="/atualizarUltimasJogadas" >
+                    <p:ajax event="message" update="panelExperimento"/>
+                </p:socket>
+
+                <p:growl widgetVar="growl" showDetail="true" />
+
+                <p:panel id="panelExperimento">
+
+                    <h:form>
+
+                        <p align="center">   
+                            <p:commandButton id="chatBtn" icon="ui-icon-comment" disabled="#{controladorExperimentoMB.experimento.id == null}" value="Bloquear Chat" action="#{controladorExperimentoMB.bloquearChat()}"/>      
+                            <p:commandButton id="denyPontosBtn" icon="ui-icon-stop" value="Bloquear Visualização de Pontos" action="#{controladorExperimentoMB.bloqueiaVisualizacaoPontos()}" disabled="#{controladorExperimentoMB.experimento.liberaVisualizarPontosIndivJogador == false || controladorExperimentoMB.experimento.id == null}" ajax="false"/>  
+                            <p:commandButton id="allowPontosBtn" icon="ui-icon-play" value="Habilitar Visualização de Pontos" action="#{controladorExperimentoMB.habilitaVisualizacaoPontos()}" disabled="#{controladorExperimentoMB.experimento.liberaVisualizarPontosIndivJogador == true || controladorExperimentoMB.experimento.id == null}" ajax="false"/>  
+                            <p:commandButton value="CHAT" oncomplete="keepScrollBottom()" onclick="PF('chatDialog').show()" disabled="#{controladorExperimentoMB.verificaStatusChat() == null || controladorExperimentoMB.verificaStatusChat()}"/>
+                            <p:commandButton value="Visualizar Matriz" actionListener="#{tableBean.carregaConstrutorPesquisador(controladorExperimentoMB.experimento.id)}" action="#{navegacaoMB.irTelaMatrixExperimento()}"/>
+                        </p>   
+
+                    </h:form>
+
+
+                    <h:outputText value="O experimento #{controladorExperimentoMB.experimento.nome} está #{controladorExperimentoMB.experimento.status}"/>
+                    <br/>
+                    <h:outputText value="Pontuação Cultural Inicial:  #{controladorExperimentoMB.experimento.pontInicialCultural} "/>
+                    <br/>
+                    <h:outputText value="Pontuação Individual Inicial:  #{controladorExperimentoMB.experimento.pontInicialCultural} "/>
+                    <br/>
+                    <p:panel header="Condição Atual">
+                        <h:outputText value="Criador: #{controladorExperimentoMB.condicaoAtual.criador} "/>
+                        <br/>
+                        <h:outputText value="Nome: #{controladorExperimentoMB.condicaoAtual.nome} "/>
+                        <br/>
+                        <h:outputText value="Objetivo: #{controladorExperimentoMB.condicaoAtual.objetivo} "/>
+                    </p:panel>
+
+                    <p:panel header="Geração Atual">
+                        <p:dataTable value="#{controladorExperimentoMB.listaJogadores}"
+                                     var="jogador"           
+                                     paginator="false" rows="10"
+                                     emptyMessage="Nenhum Jogador encontrado."
+                                     paginatorAlwaysVisible="false"
+                                     >  
+                            <p:column headerText="Nome" style="width:10%">  
+                                #{jogador.nome}  
+                            </p:column>  
+                            <p:column headerText="Pontuação Individual" style="width:4%">
+                                #{jogador.pontuacao}
+                            </p:column>
+                            <p:column headerText="Pontuação Cultural" style="width:4%">
+                                #{jogador.pontuacaoCult}
+                            </p:column>
+                        </p:dataTable> 
+                    </p:panel>
+
+                    <p:panel header="Geração Reserva">
+                        <p:dataTable value="#{controladorExperimentoMB.listaJogadoresReservas}"
+                                     var="jogador"           
+                                     paginator="false" rows="10"
+                                     emptyMessage="Nenhum Jogador Reserva"
+                                     paginatorAlwaysVisible="false"
+                                     >  
+                            <p:column headerText="Nome" style="width:10%">  
+                                #{jogador.nome}  
+                            </p:column>  
+                            <p:column headerText="Pontuação Individual" style="width:4%">
+                                #{jogador.pontuacao}
+                            </p:column>
+                            <p:column headerText="Pontuação Cultural" style="width:4%">
+                                #{jogador.pontuacaoCult}
+                            </p:column>
+                        </p:dataTable> 
+                    </p:panel>
+                    <br/>
+
+                    <h:form id="formControls">
+
+                        <p align="center">
+
+                            <p:commandButton disabled="#{controladorExperimentoMB.experimento.id == null}" action="#{controladorExperimentoMB.pausarExperimento()}" ajax="false" id="pauseBtn" icon="ui-icon-stop"   value="Pausar" />      
+
+                            <p:commandButton disabled="#{controladorExperimentoMB.experimento.id == null}" action="#{controladorExperimentoMB.continuarExperimento()}" ajax="false" id="playBtn" icon="ui-icon-play"   value="Continuar" />      
+
+                            <p:commandButton disabled="#{controladorExperimentoMB.experimento.id == null}" action="#{controladorExperimentoMB.cancelarExperimento()}" ajax="false" update="growlID" type="submit" id="cancelarBtn" icon="ui-icon-closethick"   value="Cancelar" />  
+
+                            <br />
+                            <br />
+                            <p:outputLabel value="Justificativa (Obrigatória para cancelar Experimento)"/>
+                            <br />
+                            <p:inputTextarea id="justificacaoTextarea" label="Justificativa (Obrigatória para cancelar Experimento)" value="#{controladorExperimentoMB.justificativa}"/>
+
+                            <p:growl id="growlID" showDetail="true"/>
+
+                        </p>
+
+                    </h:form>
+
+                </p:panel>
+
+                <p:panel id="panelUltJogadas" header="Últimas Escolhas">
+                    <h:form>
+                        <p:dataTable value="#{controladorExperimentoMB.listaUltimasJogadas}"
+                                     var="jogada"
+                                     paginator="false" rows="10"
+                                     emptyMessage="Sem jogadas ainda"
+                                     paginatorAlwaysVisible="false"
+                                     >  
+                            <p:column headerText="Jogador" style="width:8%">
+                                #{jogada.nomeJogador}
+                            </p:column>
+                            <p:column headerText="Linha" style="width:5%">  
+                                #{jogada.linhaSelecionada}  
+                            </p:column>   
+                            <p:column headerText="Coluna" style="width:5%">  
+                                #{jogada.colunaSelecionada}  
+                            </p:column>   
+                            <p:column headerText="P. Individual" style="width:5%">  
+                                #{jogada.pontuacaoIndividual}  
+                            </p:column>   
+                            <p:column headerText="P. Cultural" style="width:5%">  
+                                #{jogada.pontuacaoCultural}  
+                            </p:column>
+                            <p:column headerText="Hora da jogada" style="width:10%">  
+                                <h:outputText value="#{jogada.momento}  ">
+                                    <f:convertDateTime type="date" timeZone="GMT-3" pattern="dd/MM/yyyy"/>
+                                </h:outputText>                            
+                            </p:column>
+                        </p:dataTable> 
+                    </h:form>
+
+                </p:panel>
+
+                <p:socket id="atualizaChat" channel="/chat" onMessage="handleChatMessage"></p:socket>
+
+                <p:dialog header="Chat" appendTo="@(body)" id="chatDialog" 
+                          widgetVar="chatDialog" width="500" height="380" 
+                          resizable="false" modal="true" style="background-color: whitesmoke;" >  
+
+                    <h:form id="chatForm">
+                        <p:panel >
+                            <h:panelGrid columns="1" >
+                                <h:inputTextarea id="chat-input-area" cols="60" rows="15" readonly="true"  
+                                                 styleClass="container"
+                                                 value="#{chatBean.chatMessage}"/>
+
+                                <h:inputText id="entradaChat" size="60" value="#{chatBean.message}"/>
+
+                                <p:watermark for="entradaChat" value="Digite aqui mensagem ao chat" id="textChatAjuda" />
+
+                                <p:spacer height="2" />
+                                <p:commandButton value="Enviar Mensagem"
+                                                 actionListener="#{chatBean.sendMessage(pesquisadorMB.pesquisador.nome, pesquisadorMB.pesquisador.id, controladorExperimentoMB.experimento.id)}" update="entradaChat">
+                                </p:commandButton>
+                                <p:spacer height="2" />                 
+                                <p:commandButton value="Fechar Chat"
+                                                 onclick="PF('chatDialog').hide()" ></p:commandButton>
+
+                            </h:panelGrid>
+                        </p:panel>
+
+
+                        <p:remoteCommand name="showMessage"
+                                         actionListener="#{chatBean.receiveMessage}" oncomplete="keepScrollBottom()" update="chatForm:chat-input-area"></p:remoteCommand>
+
+                    </h:form>
+
+                </p:dialog>
+
+            </div>
+
+        </ui:define>
+
+    </ui:composition>
+
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      >
+    <h:head>
+        <title>Bem-vindo Jogador!</title>
+        <link rel="StyleSheet" type="text/css" 
+                 href="#{request.contextPath}/css/m-trix.css" media="screen" />
+         <p:graphicImage value="/img/imagemmtrix1.png" styleClass="imglogo" /> 
+    </h:head>
+    <h:body>
+
+        <h:form id="formJogador">
+            
+            <p:growl autoUpdate="true" showDetail="false" id="growl" rendered="#{jogadorMB.exibeMsg == true}"/>
+
+            <h:outputText value="Bem-vindo #{jogadorMB.jogador.username}"/>
+            <br/>
+            <br/>
+            <p:commandButton value="Sair" icon="ui-icon-power" action="#{navegacaoMB.irPaginaLogoff()}" />
+            
+            <p:panel id="panel1" header="Seu Experimento" style="text-align: center;margin-bottom:10px;margin-left: 180px;margin-right: 180px;margin-top: 10%">
+                <p:dataTable value="#{jogadorMB.pegaExperimento()}" var="experimento" rendered="#{jogadorMB.experimento.id != null}">
+                    
+                    <p:column headerText="Nome">
+                        #{experimento.nome}
+                    </p:column>
+
+                    <p:column headerText="Status">
+                        #{experimento.status}
+                    </p:column>
+
+                </p:dataTable>
+                
+                <p:spacer/>
+                
+                <p:separator/>
+                
+                <p:commandButton id="activeExp"
+                                 disabled="#{jogadorMB.flagIniciarExp == true}"
+                                 value="Iniciar partida"
+                                 actionListener="#{tableBean.carregaConstrutorJogador()}"
+                                 action="#{navegacaoMB.irTelaMatrixExperimento()}"
+                                 />
+            </p:panel>
+            
+        </h:form>
+<footer class="site-footer" >
+    
+    <div align="center"> 
+        <h3> M-trix 2014. © Todos os direitos reservados.</h3>
+    </div>
+    </footer>
+    </h:body>
+</html>

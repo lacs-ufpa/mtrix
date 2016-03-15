@@ -1,0 +1,77 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <ui:composition template="../layout/geral.xhtml">
+
+        <ui:define name="conteudoCentral">
+
+
+            <div class="page-wrap">
+                <h:form id="form4">
+                    <p:growl id="growl" autoUpdate="true" showDetail="false"/>
+
+                    <p:panel id="panel" header="Novos Participantes">  
+                        <h:panelGrid columns="4" style="text-align: right">  
+
+                            <h:outputLabel value="(*) Campos Obrigatórios!" style="margin-left: 50px; color: #ff0018"/>
+                            <h:outputLabel value=" " style="margin-left: 50px; color: #ff0018"/>
+                            <h:outputLabel value=" " style="margin-left: 50px; color: #ff0018"/>
+
+                            <br/>
+                            <br/>
+
+                            <h:outputLabel for="nome" value="Código Inicial: " style="text-align: center"/>  
+                            <p:inputText id="nome" value="#{cadastraVariosJogadoresMB.codigoInicial}" required="true" requiredMessage="É necessário informar o nome do jogador" label="Name"
+                                         title="Código que será usado para formar o username dos participantes."> 
+                                <f:validateLength minimum="2" />  
+                            </p:inputText>  
+                            <span class="required">*</span>
+                            <p:tooltip id="tp-nome" for="nome" showEvent="focus" hideEvent="blur" style="background-color: white"/>
+
+                            <h:outputLabel for="qtd-jog" value="Quantidade de participantes: " />  
+                            <p:inputText id="qtd-jog" value="#{cadastraVariosJogadoresMB.quantidadeJogadores}" required="true" requiredMessage="É necessário informar a quantidade de participantes que se deseja cadastrar"
+                                         title="Quantidade de participantes que serão cadastrados."/> 
+                            <span class="required">*</span>
+                            <p:tooltip id="tp-qtd-jog" for="qtd-jog" showEvent="focus" hideEvent="blur" style="background-color: white" />
+
+                            <h:outputLabel for="pwd1" value="Senha: " />  
+                            <p:password  id="pwd1" value="#{cadastraVariosJogadoresMB.senha}" validatorMessage="A senha precisa ter pelo menos 4 caracteres" match="pwd2" label="Password 1" required="true" requiredMessage="É necessário informar uma senha para efetuar login">
+                                <f:validateLength minimum="4" />
+                            </p:password>
+                            <span class="required">*</span>
+                            <h:outputLabel value=" " style="margin-left: 50px; color: #ff0018"/>
+
+                            <h:outputLabel for="pwd2" value="Repita a senha: " />  
+                            <p:password id="pwd2" value="#{cadastraVariosJogadoresMB.senha}" label="Password 2" required="true" requiredMessage="É necessário informar uma senha para efetuar login"/>
+                            <span class="required">*</span>
+
+                        </h:panelGrid>                            
+
+                        <br/>
+                        <p align="center">  
+                            <p:commandButton id="saveButton" icon="ui-icon-check"
+                                             value="Cadastrar Jogadores"
+                                             ajax="false"
+                                             actionListener="#{cadastraVariosJogadoresMB.cadastraJogadores()}"/>
+
+                            <p:spacer width="20" />
+                            <p:commandButton id="cancelBtn" icon="ui-icon-cancel"   value="Cancelar" immediate="true"
+                                             action="#{navegacaoMB.voltarInicioPesquisador()}"
+                                             />      
+                        </p>      
+
+                    </p:panel>
+
+                </h:form>
+
+            </div>
+
+        </ui:define>
+
+    </ui:composition>
+
+</html>

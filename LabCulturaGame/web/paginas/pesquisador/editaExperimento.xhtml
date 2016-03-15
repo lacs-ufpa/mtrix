@@ -1,0 +1,369 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <ui:composition template="../layout/geral.xhtml">
+
+        <ui:define name="conteudoCentral">
+
+
+            <div class="page-wrap">
+
+                <br/>
+
+                <p:panel id="panel" header="Editar Experimento">  
+
+                    <h:form id="form1">
+
+                        <p:growl id="growl" showDetail="false" life="4000"/>
+
+                        <p:panel style="text-align: center">
+                            <p align="center">
+                                <h:panelGrid columns="3" style="text-align: left; ">
+                                    <p:outputLabel value="Nome                        "/>
+                                    <h:inputText required="true" requiredMessage="O nome do experimento é obrigatório" size="40"  id="nome" value="#{experimentoMB.experimentoSelecionado.nome}"/>
+                                    <span class="required">*</span>
+                                    <br/>
+                                    <p:outputLabel value="Objetivo                    "/>
+                                    <h:inputTextarea required="true" requiredMessage="É necessário indicar um objetivo pro experimento" rows="5" cols="40" id ="objetivo" value="#{experimentoMB.experimentoSelecionado.objetivo}"/>
+                                    <span class="required">*</span>
+                                    <br/>
+                                    <p:outputLabel value="Mensagem de Espera (Opcional)"/>
+                                    <h:inputTextarea rows="5" cols="40" id="mensagem-edit" value="#{experimentoMB.experimentoSelecionado.mensagemEspera}"
+                                                     title="Mensagem que será exibida aos participantes na sala de espera enquanto aguardam o inicio do experimento."                             
+                                                     />
+                                    <p:tooltip id="tpmensagem" for="mensagem-edit" showEvent="focus" hideEvent="blur" />
+                                    <p:outputLabel value="Mensagem de Conclusão        "/>
+                                    <h:inputTextarea rows="5" cols="40" id="mensagemFinal" value="#{experimentoMB.experimentoSelecionado.mensagemFinalExperimento}"
+                                                     title="Mensagem que será exibida aos participantes na conclusão do experimento."                             
+                                                     />
+                                    <span class="required">*</span>
+
+                                    <p:outputLabel value="Tipo de Matriz"/>
+                                    <h:selectOneMenu required="false" id ="tipoMatrix" value="#{experimentoMB.experimentoSelecionado.tipoMatriz}">
+                                        <f:selectItem  itemValue="2" itemLabel="Circulo Vazado"/>
+                                        <f:selectItem itemValue="1" itemLabel="Sem Circulo"/>
+                                    </h:selectOneMenu>
+                                    <br/>
+                                    <br/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" style="text-align: left; ">
+                                    <p:outputLabel value="Pontuacao Cultural Inicial  "/>
+                                    <h:inputText required="false" id ="pci" size="40" value="#{experimentoMB.experimentoSelecionado.pontInicialCultural}"/>
+
+                                    <p:outputLabel value="Pontuacao Individual Inicial"/>
+                                    <h:inputText required="false" id ="pii" size="40" value="#{experimentoMB.experimentoSelecionado.pontInicialIndividual}"/>
+                                </h:panelGrid>
+                            </p>
+                        </p:panel>
+
+                        <br/>
+
+                        <p:dataTable id="condicoesAtuais" var="condicaoAtual" value="#{experimentoMB.condicoesNoExperimentoModel}" 
+                                     paginator="true" 
+                                     rows="10"
+                                     rowKey="#{condicaoAtual.id}"
+                                     style="margin-top: 20px"
+                                     selection="#{experimentoMB.condicoesSelecionadas}"
+                                     emptyMessage="Nenhuma condição encontrada">  
+
+                            <f:facet name="header">  
+                                Condições
+                            </f:facet>  
+
+                            <p:column selectionMode="multiple" style="width:2%" >
+                            </p:column>
+
+                            <p:column >  
+                                <f:facet name="header">  
+                                    <h:outputText value="Nome" />  
+                                </f:facet>  
+                                <h:outputText value="#{condicaoAtual.nome}" />  
+                            </p:column>  
+
+                            <p:column filterBy="#{condicaoAtual.nivelComplexidade}" filterMatchMode="contains">  
+                                <f:facet name="header">  
+                                    <h:outputText value="Complexidade" />  
+                                </f:facet>  
+                                <h:outputText value="#{condicaoAtual.nivelComplexidade}" />  
+                            </p:column>  
+
+                            <p:column>  
+                                <f:facet name="header">  
+                                    <h:outputText value="Posições" />  
+                                </f:facet>  
+                                <p:inputText value="#{condicaoAtual.posicao}" />  
+                            </p:column>  
+
+                        </p:dataTable>
+
+                        <p:spacer/>
+
+                        <p:dataTable id="condicoesLivres" var="condicaoLivre" value="#{experimentoMB.condicoesNaoCadastradasExperimentoModel}" 
+                                     paginator="true" 
+                                     rows="10" 
+                                     lazy="true"
+                                     rowIndexVar="rowIndex" rowKey="#{condicaoLivre.id}"
+                                     style="margin-top: 20px"
+                                     selection="#{experimentoMB.condicoesSelecionadasAdicionadas}"
+                                     emptyMessage="Nenhuma condição encontrada">  
+
+                            <f:facet name="header">  
+                                Condições Não Cadastradas no Experimento
+                            </f:facet>  
+
+                            <p:column selectionMode="multiple" style="width:2%" >
+                            </p:column>
+
+                            <p:column >  
+                                <f:facet name="header">  
+                                    <h:outputText value="Nome" />  
+                                </f:facet>  
+                                <h:outputText value="#{condicaoLivre.nome}" />  
+                            </p:column>  
+
+                            <p:column filterBy="#{condicaoLivre.nivelComplexidade}" filterMatchMode="contains">  
+                                <f:facet name="header">  
+                                    <h:outputText value="Complexidade" />  
+                                </f:facet>  
+                                <h:outputText value="#{condicaoLivre.nivelComplexidade}" />  
+                            </p:column>  
+
+                            <p:column>  
+                                <f:facet name="header">  
+                                    <h:outputText value="Posições" />  
+                                </f:facet>  
+                                <p:inputText value="#{condicaoLivre.posicao}" />  
+                            </p:column>  
+
+                        </p:dataTable> 
+
+                        <p:spacer/>
+
+                        <p:panel style="text-align: center">
+                            <f:facet name="header">
+                                Configuração da mudança de geração entre os jogadores
+                            </f:facet>
+
+                            <p:selectOneRadio id="customRadio" value="#{experimentoMB.criterio}" layout="custom">
+                                <f:selectItem itemLabel="NivelAcertoIndiv" itemValue="NIVEL_ACERTO_INDIV" />
+                                <f:selectItem itemLabel="NivelAcertoCultural" itemValue="NIVEL_ACERTO_CULTURAL" />
+                                <f:selectItem itemLabel="NivelComplexidade" itemValue="NIVEL_COMPLEXIDADE" />
+                                <f:selectItem itemLabel="NumeroCiclos" itemValue="NUMERO_CICLO" />
+                                <f:ajax render="inputNivelAcertoIndiv"/>
+                                <f:ajax render="inputNivelAcertoCultural"/>
+                                <f:ajax render="inputNivelComplexidade"/>
+                                <f:ajax render="inputNumeroCiclos"/>
+                            </p:selectOneRadio>
+
+                            <h:panelGrid columns="3" cellpadding="2">
+                                <p:radioButton id="opt1" for="customRadio" itemIndex="0" />
+                                <h:outputLabel for="opt1" value="Após atingir porcentagem de acerto individual: " />
+                                <h:inputText id="inputNivelAcertoIndiv" value="#{experimentoMB.experimentoSelecionado.porcentagemAcertoIndiv}" disabled="#{experimentoMB.criterio != 'NIVEL_ACERTO_INDIV'}"/>
+
+                                <p:radioButton id="opt2" for="customRadio" itemIndex="1" />
+                                <h:outputLabel for="opt2" value="Após atingir porcentagem de acerto cultural: " />
+                                <h:inputText id="inputNivelAcertoCultural" value="#{experimentoMB.experimentoSelecionado.porcentagemAcertoCult}" disabled="#{experimentoMB.criterio != 'NIVEL_ACERTO_CULTURAL'}" />
+
+                                <p:radioButton id="opt3" for="customRadio" itemIndex="2" />
+                                <h:outputLabel for="opt3" value="Após atingir condição de complexidade: " />
+                                <h:selectOneMenu id ="inputNivelComplexidade" value="#{condicaoMB.condicao.nivelComplexidade}" disabled="#{experimentoMB.criterio != 'NIVEL_COMPLEXIDADE'}">
+                                    <f:selectItem  itemValue="FACIL" itemLabel="Fácil"/>
+                                    <f:selectItem itemValue="MEDIO" itemLabel="Médio"/>
+                                    <f:selectItem itemValue="COMPLEXO" itemLabel="Complexo"/>
+                                </h:selectOneMenu>
+
+                                <p:radioButton id="opt4" for="customRadio" itemIndex="3" />
+                                <h:outputLabel for="opt4" value="Após atingir a quantidade de ciclos: " />
+                                <h:inputText id="inputNumeroCiclos" value="#{experimentoMB.experimentoSelecionado.quantidadeJogadas}" disabled="#{experimentoMB.criterio != 'NUMERO_CICLO'}" />
+                            </h:panelGrid>
+
+                            <p:separator/>
+
+                            <h:panelGrid columns="3" cellpadding="2">
+                                <h:outputLabel value="Quantidade de jogadores por geração: "/>
+                                <h:inputText required="true" value="#{experimentoMB.experimentoSelecionado.tamanhoFilaJogadores}"/>
+                                <span class="required">*</span>
+                            </h:panelGrid>
+
+                        </p:panel>
+
+                        <p:spacer/>
+
+                        <p:panel style="margin-bottom: 50px; text-align: center">
+
+                            <f:facet name="header">
+                                Configuração dos parâmetros de visualização dos jogadores
+                            </f:facet>
+
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <p:outputLabel for="visualizaPontos" value="Permite visualização de pontuação individual? " />
+                                <p:selectOneRadio id="visualizaPontos" value="#{experimentoMB.experimentoSelecionado.liberaVisualizarPontosIndivJogador}">
+                                    <f:selectItem itemLabel="Sim" itemValue="#{true}" />
+                                    <p:spacer width="10"/>
+                                    <f:selectItem itemLabel="Não" itemValue="#{false}" />
+                                </p:selectOneRadio>
+
+                                <p:outputLabel for="visualizaUltimaJogada" value="Permite visualização da última jogada? " />
+                                <p:selectOneRadio id="visualizaUltimaJogada" value="#{experimentoMB.experimentoSelecionado.liberaVisualizarUltimaJogada}">
+                                    <f:selectItem itemLabel="Sim" itemValue="true" />
+                                    <p:spacer width="10"/>
+                                    <f:selectItem itemLabel="Não" itemValue="false" />
+                                </p:selectOneRadio>
+
+                                <p:outputLabel for="visualizaAlertaPontuacao" value="Permite alerta sobre a pontuação? " />
+                                <p:selectOneRadio id="visualizaAlertaPontuacao" value="#{experimentoMB.experimentoSelecionado.liberaAlertaPontuacao}">
+                                    <f:selectItem itemLabel="Sim" itemValue="true" />
+                                    <p:spacer width="10"/>
+                                    <f:selectItem itemLabel="Não" itemValue="false" />
+                                </p:selectOneRadio>
+                            </h:panelGrid>
+
+                        </p:panel>
+
+                        <p:panel style=" text-align: center">
+
+                            <f:facet name="header">
+                                Configuração do Chat
+                            </f:facet>
+
+                            <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+                                <p:outputLabel for="chat" value="Chat:" />
+                                <p:selectOneRadio id="chat" value="#{experimentoMB.experimentoSelecionado.chat}">
+                                    <f:selectItem itemLabel="Habilitado" itemValue="HABILITADO" />
+                                    <p:spacer width="10"/>
+                                    <f:selectItem itemLabel="Desabilitado" itemValue="DESABILITADO" />
+                                </p:selectOneRadio>
+                            </h:panelGrid>
+
+                        </p:panel>
+
+                        <br/>
+                        <br/>
+
+                        <p:panel style=" text-align: center">
+
+                            <f:facet name="header">
+                                Configuração da Ordenação dos Jogadores
+                            </f:facet>
+
+                            <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+                                <h:outputText value="Ordenação aleatória dos Jogadores: " />
+                                <p:selectBooleanCheckbox value="#{experimentoMB.experimentoSelecionado.ordemRandomicaJogadores}" />
+                            </h:panelGrid>
+
+                        </p:panel>
+
+                        <p:spacer/>
+
+                        <p:panel style=" text-align: center">
+
+                            <f:facet name="header">
+                                Configuração dos Jogadores Atuais
+                            </f:facet>
+
+                            <p:dataTable value="#{experimentoMB.jogadoresModel}"
+                                         var="jogadorAlocado" editable="true"
+                                         paginator="true" rows="10"
+                                         emptyMessage="Nenhum Jogador Cadastrado."
+                                         selection="#{experimentoMB.listaJogadoresExperSelec}">
+
+                                <f:facet name="header">  
+                                    Jogadores Alocados
+                                </f:facet>   
+
+                                <p:column selectionMode="multiple" style="width:2%" />
+
+                                <p:column filterBy="username" filterMatchMode="contains" headerText="Login" style="width:10%">  
+                                    #{jogadorAlocado.username}  
+                                </p:column>   
+
+                                <p:column headerText="Nome" style="width:10%">  
+                                    #{jogadorAlocado.nome}  
+                                </p:column>   
+
+                                <p:column headerText="Ordem" style="width:10%">  
+                                    <p:cellEditor >
+                                        <f:facet name="output">
+                                            <h:outputText value="#{jogadorAlocado.ordem}"/>
+                                        </f:facet>
+                                        <f:facet name="input">
+                                            <p:inputText value="#{jogadorAlocado.ordem}" maxlength="2" style="width:100%" />
+                                        </f:facet>
+                                    </p:cellEditor>
+                                </p:column>  
+
+                                <p:column style="width:10%" >
+                                    <p:rowEditor/>
+                                </p:column>
+
+                            </p:dataTable>
+
+                            <br/>
+
+                            <p:dataTable value="#{experimentoMB.listaJogadoresLivresModel}"
+                                         var="jogador"
+                                         editable="true"
+                                         lazy="true"
+                                         paginator="true" rows="10"
+                                         emptyMessage="Nenhum Jogador encontrado."
+                                         selection="#{experimentoMB.listaJogadoresLivresSelec}" style="margin-top: 20px">  
+
+                                <f:facet name="header">  
+                                    Jogadores Disponíveis  
+                                </f:facet>   
+
+                                <p:column selectionMode="multiple" style="width:2%" />
+
+                                <p:column filterBy="username" filterMatchMode="contains" headerText="Login" style="width:10%">  
+                                    #{jogador.username}  
+                                </p:column>   
+
+                                <p:column headerText="Nome" style="width:10%">  
+                                    #{jogador.nome}  
+                                </p:column>   
+
+                                <p:column headerText="Ordem" style="width:10%">  
+                                    <p:cellEditor >
+                                        <f:facet name="output">
+                                            <h:outputText value="#{jogador.ordem}"/>
+                                        </f:facet>
+                                        <f:facet name="input">
+                                            <p:inputText value="#{jogador.ordem}" maxlength="2" style="width:100%" />
+                                        </f:facet>
+                                    </p:cellEditor>
+                                </p:column>  
+
+                                <p:column style="width:10%" >
+                                    <p:rowEditor/>
+                                </p:column>
+
+                            </p:dataTable>  
+
+                        </p:panel>
+
+                        <p align="center">
+                            <p:commandButton id="submit"
+                                             actionListener="#{experimentoMB.atualizaExperimento(pesquisadorMB.pesquisador)}" 
+                                             value="Atualizar" 
+                                             ajax="false"/>
+                            <p:commandButton value="Voltar"
+                                             action="#{navegacaoMB.irPaginaInicialUsuario()}"/>
+                        </p>
+
+                    </h:form>
+
+                </p:panel>
+
+            </div>
+
+        </ui:define>
+
+    </ui:composition>
+</html>

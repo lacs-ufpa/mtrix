@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core" >
+
+
+    <h:head>
+        <title>Login</title>
+        <!--Chamada ao arquivo CSS -->
+        <link rel="StyleSheet" type="text/css" 
+              href="css/m-trix.css" media="screen" />
+        <p align="center">
+            <p:graphicImage value="/img/imagemmtrix1.png" class="img" /> 
+        </p>
+        <link rel="shortcut icon" href="./paginas/publico/img/mtrixicon.png"/>
+    </h:head>
+
+    <h:body>
+
+        <p:dialog visible="true" closable="false"
+                  draggable="false" resizable="false" width="420"  >
+            <f:facet name="header" > M-Trix </f:facet> 
+            <center>
+                <h:outputText value="Usuário ou senha incorretos!" 
+                              rendered="#{param.erro}" styleClass="erro"/>
+            </center>
+            <form action="j_spring_security_check" method="post">
+                <h:panelGrid columns="2" cellspacing="6">
+                    <h:outputLabel for="j_username" value="Login: " /> 
+                    <h:inputText id="j_username" value="#{loginMB.username}" required="true" />
+                    <h:outputLabel for="j_password" value="Senha: " />
+                    <h:inputSecret id="j_password" value="#{loginMB.password}" required="true" />
+
+                    <p align="center">
+                        <h:commandButton value="Login" 
+                                         actionListener="#{loginMB.doLogin}" styleClass="botoes" />
+                    </p>
+
+                </h:panelGrid>
+            </form>
+
+            <h:form>
+                <h:commandLink value="Esqueceu a senha? Clique aqui!" action="#{navegacaoMB.irPaginaRecuperaSenha()}"/>
+            </h:form>
+
+        </p:dialog>
+
+        <div class="page-wrap">
+        </div>
+
+        <footer class="site-footer" >
+            <div align="center"> 
+            <table id="links" >
+            <tr>
+                <td><a target="_blank" href="http://104.237.132.159/lcs/"> Laboratório </a></td>
+                
+                <td><a target="_blank" href="http://ufpa.br"> UFPA  </a></td>
+            </tr>
+            <tr>
+                
+            </tr>
+        
+            <tr>
+                
+            </tr>
+        </table>
+        <br/> 
+        <h3 style="color: white" > M-trix © Todos os direitos reservados </h3>
+        <h3 style="color: white"> Laboratório de Comportamento Social e Seleção Cultural da UFPA (LACS/UFPA).</h3>
+        <h4>v 1.0 </h4>
+    </div>
+        </footer>
+    </h:body>
+
+</html>
