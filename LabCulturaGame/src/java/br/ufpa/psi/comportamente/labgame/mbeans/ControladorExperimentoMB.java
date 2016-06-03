@@ -943,11 +943,11 @@ public class ControladorExperimentoMB implements ExperimentoObservable, Serializ
       private void verificaCondicao() {
             if (contadorAtualCondicao >= (tableCondicaoExperimento.size()) && condicaoAtual.getFimPorQuantCiclo() <= contCicloCondicaoAtual) {
                   estadoExecucao = estadoFinal;
-            } else if (condicaoAtual.getMinimoCiclos() > contCicloCondicaoAtual) {
+            } else if (condicaoAtual.getMinimoCiclos() != null && condicaoAtual.getMinimoCiclos() > contCicloCondicaoAtual) {
                   contCicloCondicaoAtual += 1;
-            } else if (condicaoAtual.getUltimosXCiclos() > contCicloCondicaoAtual) {
+            } else if (condicaoAtual.getUltimosXCiclos() != null && condicaoAtual.getUltimosXCiclos() > contCicloCondicaoAtual) {
                   contCicloCondicaoAtual += 1;
-            } else if (condicaoAtual.getMinimoCiclos() > 0 && condicaoAtual.getUltimosXCiclos() <= contCicloCondicaoAtual
+            } else if ((condicaoAtual.getMinimoCiclos() != null && condicaoAtual.getUltimosXCiclos() != null && condicaoAtual.getFimPorQuantCiclo() != null) && condicaoAtual.getMinimoCiclos() > 0 && condicaoAtual.getUltimosXCiclos() <= contCicloCondicaoAtual
                     && condicaoAtual.getFimPorQuantCiclo() > contCicloCondicaoAtual) {
                   if (condicaoAtual.getUltimosXCiclos() > 0 && condicaoAtual.getUltimosXCiclos() < contCicloCondicaoAtual) {
                         removeCicloMenorXCiclos(Constantes.CONDICAO);
@@ -977,7 +977,7 @@ public class ControladorExperimentoMB implements ExperimentoObservable, Serializ
                   } else {
                         contCicloCondicaoAtual += 1;
                   }
-            } else if (condicaoAtual.getFimPorQuantCiclo() > 0 && condicaoAtual.getFimPorQuantCiclo() <= contCicloCondicaoAtual && tableCondicaoExperimento.size() > contadorAtualCondicao) {
+            } else if ((condicaoAtual.getFimPorQuantCiclo() != null && condicaoAtual.getFimPorQuantCiclo() != null) && condicaoAtual.getFimPorQuantCiclo() > 0 && condicaoAtual.getFimPorQuantCiclo() <= contCicloCondicaoAtual && tableCondicaoExperimento.size() > contadorAtualCondicao) {
                   contadorAtualCondicao += 1;
                   condicaoAtual = tableCondicaoExperimento.get(contadorAtualCondicao).getCondicao();
                   informaPesquisadorMudancaCondicao();

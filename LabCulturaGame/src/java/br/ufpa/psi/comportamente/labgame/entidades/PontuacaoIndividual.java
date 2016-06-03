@@ -116,6 +116,9 @@ public class PontuacaoIndividual implements Serializable {
       }
 
       public boolean comPontuacaoAleatoria() {
+          if (this.tipoPontuacaoAleatoria == null) {
+              return false;
+          }
             return !this.tipoPontuacaoAleatoria.equalsIgnoreCase("");
       }
       
