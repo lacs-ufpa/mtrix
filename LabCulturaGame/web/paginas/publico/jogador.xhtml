@@ -7,7 +7,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       >
     <h:head>
-        <title>Bem-vindo Jogador!</title>
+        <title>Bem-vindo ao Mtrix!</title>
         <link rel="StyleSheet" type="text/css" 
                  href="#{request.contextPath}/css/m-trix.css" media="screen" />
          <p:graphicImage value="/img/imagemmtrix1.png" styleClass="imglogo" /> 
@@ -16,8 +16,6 @@
 
         <h:form id="formJogador">
             
-            <p:growl autoUpdate="true" showDetail="false" id="growl" rendered="#{jogadorMB.exibeMsg == true}"/>
-
             <h:outputText value="Bem-vindo #{jogadorMB.jogador.username}"/>
             <br/>
             <br/>
@@ -28,6 +26,10 @@
                     
                     <p:column headerText="Nome">
                         #{experimento.nome}
+                    </p:column>
+                    
+                    <p:column headerText="Mensagem Inicial">
+                        #{experimento.mensagemEspera}
                     </p:column>
 
                     <p:column headerText="Status">
@@ -52,7 +54,7 @@
 <footer class="site-footer" >
     
     <div align="center"> 
-        <h3> M-trix 2014. © Todos os direitos reservados.</h3>
+        <h3> M-trix © Todos os direitos reservados.</h3>
     </div>
     </footer>
     </h:body>
