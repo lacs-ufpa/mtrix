@@ -551,11 +551,11 @@ public class TableBean implements TableObserver, Serializable {
       }
 
       public boolean isMatrizSemCirculo() {
-            return this.obs.getTipoMatriz() == Experimento.SEM_CIRCULO;
+            return this.obs == null ? false : (this.obs.getTipoMatriz() == Experimento.SEM_CIRCULO);
       }
 
       public boolean isMatrizCirculoVazado() {
-            return this.obs.getTipoMatriz() == Experimento.CIRCULO_VAZADO;
+            return this.obs == null ? false : (this.obs.getTipoMatriz() == Experimento.CIRCULO_VAZADO);
       }
 
       public Jogador getJogadorUltimaJogada() {
