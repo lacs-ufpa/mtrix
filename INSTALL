@@ -1,0 +1,88 @@
+## Linux (Debian8) install instructions
+
+- install MySQL => 5.5 database server and client
+sudo apt-get install mysql-client mysql-server
+
+- take note of the username, password and port of the default database
+- usually root, 1234, 3306
+
+- username, password and port must match username, password and port in the following files:
+- LabCulturaGame/src/java/META-INF/persistence.xml
+- LabCulturaGame/src/conf/persistence.xml
+
+- to generate the database run the /home/rafael/git/mtrix/LabCulturaGame/dump/mtrix.sql script with mysql 
+
+- install MySQL Workbench (optional)
+sudo mysql-workbench
+
+- install jvm and jdk 8
+-- add repository if necessary
+-- deb http://ftp.de.debian.org/debian jessie-backports main
+-- sudo sublime_text /etc/apt/sources.list
+
+sudo apt-get install openjdk-8-jdk openjdk-8-jre
+
+- configure JAVA_HOME environmental variable by adding the line:
+  - JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"
+
+sublime_text /etc/environment 
+source /etc/environment
+echo $JAVA_HOME
+
+- make jdk home visible to netbeans if necessary 
+netbeans --javapath '/usr/lib/jvm/java-8-openjdk-amd64/'
+
+- install tomcat8
+sudo apt-get install tomcat8 tomcat8-common tomcat8-admin tomcat8-user
+
+- configure tomcat-users.xml to allow access to Tomcat Manager page localhost:8080/manager/html
+sudo sublime_text /etc/tomcat8/tomcat-users.xml
+
+<?xml version='1.0' encoding='utf-8'?>
+<tomcat-users>
+    <role rolename="manager-script"/>
+    <role rolename="admin"/>
+    <role rolename="admin-gui"/>
+    <role rolename="manager"/>
+    <role rolename="manager-gui"/>
+
+    <user username="admin" password="admin" roles="admin,admin-gui,manager,manager-gui,manager-script"/>
+</tomcat-users>
+
+- install Netbeans 8.1 (full)
+sh ./netbeans-8.1-linux.sh
+
+- some fixes to properly build and run using netbeans
+
+- Fix for 'The specified Server Location (Catalina Home) folder is not valid'.
+cd /usr/share/tomcat8/lib
+sudo mv catalina.jar catalina.jar.bk
+sudo wget http://www.razius.com/files/catalina.jar
+
+- Fix for 'The <CATALINA_HOME>/conf/server.xml can’t be read'. 
+sudo ln -s /etc/tomcat8/ /usr/share/tomcat8/conf
+
+- Avoid permission conflicts. Replace USERNAME with your OS username:
+- sudo chown -R USERNAME:USERNAME /etc/tomcat8/
+- sudo chown -R USERNAME:USERNAME /usr/share/tomcat8/
+- example:
+sudo chown -R rafael:rafael /etc/tomcat8/
+sudo chown -R rafael:rafael /usr/share/tomcat8/
+
+- disable upstart Tomcat server (optional)
+sudo update-rc.d tomcat8 disable 0123456
+
+- revert temporary changes
+cd /usr/share/tomcat8/lib
+sudo rm catalina.jar
+sudo mv catalina.jar.bk catalina.jar
+
+- add tomcat server to the server list of netbeans
+- tomcat8 path: /usr/share/tomcat8/
+- catalina base path: /usr/share/tomcat8
+
+- done.
+
+## Windows install instructions
+
+- todo
