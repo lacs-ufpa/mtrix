@@ -1,3 +1,10 @@
+/*~
+M-Trix - Social Experiments Application.
+Copyright (C) 2015-2016 The M-Trix authors.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+~*/
 -- MySQL dump 10.13  Distrib 5.6.11, for Win64 (x86_64)
 --
 -- Host: localhost    Database: labgame

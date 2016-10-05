@@ -1,3 +1,10 @@
+/*~
+M-Trix - Social Experiments Application.
+Copyright (C) 2015-2016 The M-Trix authors.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+~*/
 -- MySQL dump 10.13  Distrib 5.6.11, for Win64 (x86_64)
 --
 -- Host: localhost    Database: mtrix
@@ -184,7 +191,7 @@ CREATE TABLE `contato` (
 
 LOCK TABLES `contato` WRITE;
 /*!40000 ALTER TABLE `contato` DISABLE KEYS */;
-INSERT INTO `contato` VALUES (1,'','','','weslleysammyr@gmail.com','','','','');
+INSERT INTO `contato` VALUES (1,'','','','no.email@ufpa.br','','','','');
 /*!40000 ALTER TABLE `contato` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -386,7 +393,7 @@ CREATE TABLE `pesquisador` (
 
 LOCK TABLES `pesquisador` WRITE;
 /*!40000 ALTER TABLE `pesquisador` DISABLE KEYS */;
-INSERT INTO `pesquisador` VALUES (1,'Adailton','03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4','pesquisador1',NULL,'SI','www.lattes.com','11111'),(32768,'Weslley','8D969EEF6ECAD3C29A3A629280E686CF0C3F5D5A86AFF3CA12020C923ADC6C92','weslley',1,NULL,NULL,NULL);
+INSERT INTO `pesquisador` VALUES (1,'Pesquisador','03AC674216F3E15C761EE1A5E255F067953623C8B388B4459E13F978D7C846F4','pesquisador',NULL,'SI','www.lattes.com','11111');
 /*!40000 ALTER TABLE `pesquisador` ENABLE KEYS */;
 UNLOCK TABLES;
 
