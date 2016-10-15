@@ -10,7 +10,7 @@ sudo apt-get install mysql-client mysql-server
 - LabCulturaGame/src/java/META-INF/persistence.xml
 - LabCulturaGame/src/conf/persistence.xml
 
-- to generate the database run the /home/rafael/git/mtrix/LabCulturaGame/dump/mtrix.sql script with mysql 
+- to generate the database run the ../LabCulturaGame/dump/mtrix.sql script with mysql 
 
 - install MySQL Workbench (optional)
 sudo mysql-workbench
