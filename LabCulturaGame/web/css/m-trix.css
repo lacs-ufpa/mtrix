@@ -4,7 +4,7 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 */
 
-/* 
+/*
     Created on : Apr 2, 2014, 7:17:03 PM
     Author     : Karlena Holanda
 */
@@ -29,7 +29,7 @@ html, body {
     border: 2px outset;
     height: 35px;
     width: 80px;
-    float: center;
+    float: none;
 }
 
 .erro{
@@ -38,7 +38,7 @@ html, body {
 
 .page-wrap {
     min-height: 80%;
-    margin-bottom: -120px; 
+    margin-bottom: -120px;
 }
 
 .page-wrap:after {
@@ -47,7 +47,7 @@ html, body {
 }
 
 .site-footer, .page-wrap:after {
-    height: 120px; 
+    height: 120px;
 }
 
 .site-footer {
@@ -93,7 +93,7 @@ html, body {
 
 .alinha legend {
     color: gray;
-    flat:rigth;
+    float: right;
 }
 
 .alinha label {
@@ -126,4 +126,9 @@ div.required {
     max-height: 80%;
     background-color: white;
     overflow-y: scroll;
+}
+
+.ui-widget-content .ui-state-hover, .ui-widget-content .ui-state-highlight{
+    background: none;
+    color: inherit;
 }
