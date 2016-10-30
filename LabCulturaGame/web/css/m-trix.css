@@ -126,9 +126,10 @@ div.required {
     max-height: 80%;
     background-color: white;
     overflow-y: scroll;
+
 }
 
-.ui-widget-content .ui-state-hover, .ui-widget-content .ui-state-highlight{
+#gameForm .ui-widget-content .ui-state-hover, #gameForm .ui-widget-content .ui-state-highlight{
     background: none;
     color: inherit;
 }
