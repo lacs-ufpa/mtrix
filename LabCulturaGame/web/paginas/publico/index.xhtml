@@ -5,7 +5,7 @@ Copyright (C) 2015-2016 The M-Trix authors.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ~-->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"
@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <f:view contentType="text/html">
         <h:head>
-            <link rel="StyleSheet" type="text/css" 
+            <link rel="StyleSheet" type="text/css"
                   href="#{request.contextPath}/css/m-trix.css" media="screen" />
 
             <style>
@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     width:100%;
                     border-collapse:collapse;
                 }
-                #game td, #game th 
+                #game td, #game th
                 {
                     font-size:1em;
                     border:1px solid #98bf21;
@@ -37,31 +37,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 .amarelo {
                     font-size:1.1em;
                     text-align:center;
-                    background-color:yellow;
+                    background-color:yellow !important;
                     color:black;
                 }
                 .vermelho {
                     font-size:1.1em;
                     text-align:center;
-                    background-color:#ff0018;
+                    background-color:#ff0018 !important;
                     color:black;
                 }
                 .verde {
                     font-size:1.1em;
                     text-align:center;
-                    background-color:darkgreen;
+                    background-color:darkgreen !important;
                     color:black;
                 }
                 .azul {
                     font-size:1.1em;
                     text-align:center;
-                    background-color:blue;
+                    background-color:blue !important;
                     color:#000000;
                 }
                 .roxo {
                     font-size:1.1em;
                     text-align:center;
-                    background-color:darkmagenta;
+                    background-color:darkmagenta !important;
                     color:black;
                 }
                 .minhaTabela tr{
@@ -81,7 +81,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     width: 400px;
                     top: 30%;
                 }
-                
+
                 div[id="growlForm:growl-pont-indiv_container"] .ui-growl-image-info{
                     background: url("#{request.contextPath}/img/iconeindividual.png") no-repeat;
                 }
@@ -91,16 +91,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     width: 400px;
                     top: 50%;
                 }
-                
+
                 div[id="growlForm:growl-pont-cul_container"] .ui-growl-image-info{
                     background: url("#{request.contextPath}/img/iconegrupo.png") no-repeat;
                 }
-                
+
                 div[id="growlForm:growl_container"] {
                     right:0%;
                     width:400px;
                 }
-                
+
                 div[id="growlForm:growl_container"] .ui-growl-message p{
                     display: none;
                 }
@@ -139,7 +139,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     showMessage([{name: 'msg', value: data.emissorMsg + ': ' + data.conteudoMensagem}]);
                     $.ionSound.play("water_droplet_3");
                 }
-                
+
                 function keepScrollBottom() {
                     var d = $(".container").get(0);
                     d.scrollTop = d.scrollHeight;
@@ -194,16 +194,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     PF('saidaJogador').show();
                 }
 
-            </script> 
+            </script>
 
         </h:head>
 
         <h:body>
 
-            <h:form id="growlForm">                
-                <p:growl id="growl-pont-indiv" widgetVar="growlPontIndivMensagem" showDetail="true"/>  
-                <p:growl id="growl-pont-cul" widgetVar="growlPontCultMensagem" showDetail="true"/>  
-                <p:growl id="growl" widgetVar="growlMessageDefault" showSummary="false" showDetail="false"/>  
+            <h:form id="growlForm">
+                <p:growl id="growl-pont-indiv" widgetVar="growlPontIndivMensagem" showDetail="true"/>
+                <p:growl id="growl-pont-cul" widgetVar="growlPontCultMensagem" showDetail="true"/>
+                <p:growl id="growl" widgetVar="growlMessageDefault" showSummary="false" showDetail="false"/>
             </h:form>
 
             <p:layout fullPage="true" >
@@ -219,29 +219,29 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p:layoutUnit  id="tabelaCenter" position="center">
 
-                    <h:form id="gameForm">  
+                    <h:form id="gameForm">
 
-                        <p:dataTable styleClass="minhaTabela" rowIndexVar="rowIndex" 
+                        <p:dataTable styleClass="minhaTabela" rowIndexVar="rowIndex"
                                      id="game" rendered="#{tableBean.jogador.ativo}"
-                                     var="linha" rows="10" value="#{tableBean.model}" 
-                                     selection="#{tableBean.selectedLinha}" 
+                                     var="linha" rows="10" value="#{tableBean.model}"
+                                     selection="#{tableBean.selectedLinha}"
                                      style="border: 1px solid black;text-align:center;"
                                      selectionMode="single" rowStyleClass="#{linha.cor}">
 
-                            <p:column  headerText="" style="width:1%;background-color:white">  
+                            <p:column  headerText="" style="width:1%;background-color:white">
                                 <p:outputLabel value="#{linha.posicao}" ></p:outputLabel>
-                            </p:column>  
+                            </p:column>
 
-                            <p:column headerText="A" style="width:1%;height:1%" > 
+                            <p:column headerText="A" style="width:1%;height:1%" >
 
                                 <p:graphicImage  value="/paginas/publico/img/dot.png" rendered="#{linha.a}"  ></p:graphicImage>
 
                                 <p:graphicImage value="/paginas/publico/img/notdot.png" rendered="#{ (!linha.a)and(tableBean.matrizSemCirculo)}  " ></p:graphicImage>
 
                                 <p:graphicImage value="/paginas/publico/img/circledot.png" rendered="#{ (!linha.a)and(tableBean.matrizCirculoVazado)}  " ></p:graphicImage>
-                            </p:column>  
+                            </p:column>
 
-                            <p:column headerText="B" style="width:1%;height:1%">  
+                            <p:column headerText="B" style="width:1%;height:1%">
 
                                 <p:graphicImage value="/paginas/publico/img/dot.png" rendered="#{linha.b}" ></p:graphicImage>
 
@@ -249,9 +249,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                                 <p:graphicImage value="/paginas/publico/img/circledot.png" rendered="#{ (!linha.b)and(tableBean.matrizCirculoVazado)}  " ></p:graphicImage>
 
-                            </p:column>  
+                            </p:column>
 
-                            <p:column headerText="C" style="width:1%;height:1%">  
+                            <p:column headerText="C" style="width:1%;height:1%">
 
                                 <p:graphicImage value="/paginas/publico/img/dot.png" rendered="#{linha.c}" ></p:graphicImage>
 
@@ -259,9 +259,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                                 <p:graphicImage value="/paginas/publico/img/circledot.png" rendered="#{ (!linha.c)and(tableBean.matrizCirculoVazado)}  " ></p:graphicImage>
 
-                            </p:column>  
+                            </p:column>
 
-                            <p:column headerText="D" style="width:1%;height:1%">  
+                            <p:column headerText="D" style="width:1%;height:1%">
 
                                 <p:graphicImage value="/paginas/publico/img/dot.png" rendered="#{linha.d}" ></p:graphicImage>
 
@@ -269,8 +269,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                                 <p:graphicImage value="/paginas/publico/img/circledot.png" rendered="#{ (!linha.d)and(tableBean.matrizCirculoVazado)}  " ></p:graphicImage>
 
-                            </p:column>  
-                            <p:column headerText="E" style="width:1%;height:1%">  
+                            </p:column>
+                            <p:column headerText="E" style="width:1%;height:1%">
 
                                 <p:graphicImage value="/paginas/publico/img/dot.png" rendered="#{linha.e}" ></p:graphicImage>
 
@@ -279,8 +279,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                 <p:graphicImage value="/paginas/publico/img/circledot.png" rendered="#{ (!linha.e)and(tableBean.matrizCirculoVazado)}  " ></p:graphicImage>
 
 
-                            </p:column>  
-                            <p:column headerText="F" style="width:1%;height:1%">  
+                            </p:column>
+                            <p:column headerText="F" style="width:1%;height:1%">
 
                                 <p:graphicImage value="/paginas/publico/img/dot.png" rendered="#{linha.f}" ></p:graphicImage>
 
@@ -288,8 +288,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                                 <p:graphicImage value="/paginas/publico/img/circledot.png" rendered="#{ (!linha.f)and(tableBean.matrizCirculoVazado)}  " ></p:graphicImage>
 
-                            </p:column>  
-                            <p:column headerText="G" style="width:1%;height:1%">  
+                            </p:column>
+                            <p:column headerText="G" style="width:1%;height:1%">
 
                                 <p:graphicImage value="/paginas/publico/img/dot.png" rendered="#{linha.g}" ></p:graphicImage>
 
@@ -297,9 +297,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                                 <p:graphicImage value="/paginas/publico/img/circledot.png" rendered="#{ (!linha.g)and(tableBean.matrizCirculoVazado)}  " ></p:graphicImage>
 
-                            </p:column>  
+                            </p:column>
 
-                            <p:column headerText="H" style="width:1%;height:1%">  
+                            <p:column headerText="H" style="width:1%;height:1%">
 
                                 <p:graphicImage value="/paginas/publico/img/dot.png" rendered="#{linha.h}" ></p:graphicImage>
 
@@ -307,8 +307,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                                 <p:graphicImage value="/paginas/publico/img/circledot.png" rendered="#{ (!linha.h)and(tableBean.matrizCirculoVazado)}  " ></p:graphicImage>
 
-                            </p:column>  
-                            <p:column headerText="I" style="width:1%;height:1%">  
+                            </p:column>
+                            <p:column headerText="I" style="width:1%;height:1%">
 
                                 <p:graphicImage value="/paginas/publico/img/dot.png" rendered="#{linha.i}" ></p:graphicImage>
 
@@ -316,8 +316,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                                 <p:graphicImage value="/paginas/publico/img/circledot.png" rendered="#{ (!linha.i)and(tableBean.matrizCirculoVazado)}  " ></p:graphicImage>
 
-                            </p:column>  
-                            <p:column headerText="J" style="width:1%;height:1%">  
+                            </p:column>
+                            <p:column headerText="J" style="width:1%;height:1%">
 
                                 <p:graphicImage value="/paginas/publico/img/dot.png" rendered="#{linha.j}" ></p:graphicImage>
 
@@ -325,20 +325,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                                 <p:graphicImage value="/paginas/publico/img/circledot.png" rendered="#{ (!linha.j)and(tableBean.matrizCirculoVazado)}  " ></p:graphicImage>
 
-                            </p:column>  
+                            </p:column>
 
 
-                            <p:column style="background-color:white; width:1%" rendered="#{tableBean.pesquisador == null}">  
+                            <p:column style="background-color:white; width:1%" rendered="#{tableBean.pesquisador == null}">
 
-                                <p:commandButton disabled="#{!tableBean.jogadaLiberada}" value="Ok" id="selectButton" actionListener="#{tableBean.setSelectedCell(rowIndex)}" action="#{tableBean.saveCurrentRound()}" update=":gameForm">  
+                                <p:commandButton disabled="#{!tableBean.jogadaLiberada}" value="Ok" id="selectButton" actionListener="#{tableBean.setSelectedCell(rowIndex)}" action="#{tableBean.saveCurrentRound()}" update=":gameForm">
 
-                                </p:commandButton>  
-                            </p:column> 
+                                </p:commandButton>
+                            </p:column>
 
 
                         </p:dataTable>
 
-                    </h:form> 
+                    </h:form>
 
                     <p:socket channel="/atualizaTable">
                         <p:ajax event="message" update="gameForm:game"/>
@@ -355,18 +355,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     </p:socket>
 
                     <h:form id="placarForm">
-                        <p:panel id="pontuacaoIndividual" header="Individual">  
-                            <h:outputText value="#{tableBean.jogador.pontuacao}" />  
-                        </p:panel>  
-
-                        <p:panel id="pontuacaoGrupo" header="Grupo">  
-                            <h:outputText value="#{tableBean.jogador.pontuacaoCult}" />  
+                        <p:panel id="pontuacaoIndividual" header="Individual">
+                            <h:outputText value="#{tableBean.jogador.pontuacao}" />
                         </p:panel>
 
-                        <p:panel id="ultimaJogada" header="Última Escolha" rendered="#{tableBean.experimentoEmExecucao.liberaVisualizarUltimaJogada}">  
+                        <p:panel id="pontuacaoGrupo" header="Grupo">
+                            <h:outputText value="#{tableBean.jogador.pontuacaoCult}" />
+                        </p:panel>
+
+                        <p:panel id="ultimaJogada" header="Última Escolha" rendered="#{tableBean.experimentoEmExecucao.liberaVisualizarUltimaJogada}">
                             <h:outputText value="#{tableBean.ultimoJogador}" />
                             <br/>
-                            <h:outputText value="#{tableBean.ultimaJogada}" />  
+                            <h:outputText value="#{tableBean.ultimaJogada}" />
                         </p:panel>
 
                         <p:spacer height="2" />
@@ -378,14 +378,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                     <p:socket channel="/chat" onMessage="handleChatMessage"/>
 
-                    <p:dialog header="Chat" id="chatDialog" widgetVar="chatDialog" 
-                              width="500" height="380" resizable="false" modal="true" 
-                              appendTo="@(body)" style="background-color: whitesmoke;" >  
+                    <p:dialog header="Chat" id="chatDialog" widgetVar="chatDialog"
+                              width="500" height="380" resizable="false" modal="true"
+                              appendTo="@(body)" style="background-color: whitesmoke;" >
 
                         <h:form id="chatForm">
                             <p:panel >
                                 <h:panelGrid columns="1">
-                                    <h:inputTextarea cols="60" rows="15" styleClass="container" readonly="true" 
+                                    <h:inputTextarea cols="60" rows="15" styleClass="container" readonly="true"
                                                      style="background-color: white" value="#{chatBean.chatMessage}"/>
 
                                     <h:inputText id="entradaChat" size="60" value="#{chatBean.message}"/>
@@ -394,15 +394,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                                     <p:spacer height="2" />
                                     <p:commandButton value="Enviar Mensagem"
-                                                     actionListener="#{chatBean.sendMessage(tableBean.jogador.getNome(),tableBean.jogador.getId(),tableBean.getExperimentoID() )}" 
+                                                     actionListener="#{chatBean.sendMessage(tableBean.jogador.getNome(),tableBean.jogador.getId(),tableBean.getExperimentoID() )}"
                                                      update="entradaChat"></p:commandButton>
-                                    <p:spacer height="2" />                 
+                                    <p:spacer height="2" />
                                     <p:commandButton value="Fechar Chat"
                                                      onclick="PF('chatDialog').hide()" ></p:commandButton>
 
                                 </h:panelGrid>
                             </p:panel>
-                            
+
                             <p:remoteCommand name="showMessage"
                                              actionListener="#{chatBean.receiveMessage}" oncomplete="keepScrollBottom()" update="chatForm"></p:remoteCommand>
 
@@ -413,7 +413,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 </p:layoutUnit>
 
                 <p:layoutUnit id="bottom" position="south" size="150" resizable="true" closable="false" collapsible="false"
-                              style="text-align:center; background-color: white">   
+                              style="text-align:center; background-color: white">
 
 
                     <p:socket channel="/atualizaPontuacao" onMessage="handleMessage">
@@ -422,23 +422,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                     <p:socket channel="/informaEsperaNovoJogador" onMessage="handleMessage"/>
 
-                    <p:carousel numVisible="9" id="basicCarousel" widgetVar="carousel" itemStyle="height:90px;width:150px;" 
-                                value="#{tableBean.jogadoresExperimento}" var="jogador" itemStyleClass="carItem" 
-                                rendered="#{tableBean.experimentoEmExecucao.liberaVisualizarPontosIndivJogador}">  
-                        <f:facet name="header">  
+                    <p:carousel numVisible="9" id="basicCarousel" widgetVar="carousel" itemStyle="height:90px;width:150px;"
+                                value="#{tableBean.jogadoresExperimento}" var="jogador" itemStyleClass="carItem"
+                                rendered="#{tableBean.experimentoEmExecucao.liberaVisualizarPontosIndivJogador}">
+                        <f:facet name="header">
                             Participantes Ativos
-                        </f:facet>  
+                        </f:facet>
 
-                        <h:panelGrid columns="1" style="width:100%; " cellpadding="1">  
+                        <h:panelGrid columns="1" style="width:100%; " cellpadding="1">
                             <p align="left">
-                                <h:outputText style="font-size: small" value="Nome: #{jogador.username}" />  
-                                <h:outputText style="font-size: small" value="Pontos: #{jogador.pontuacao}" />  
-                                <h:outputText style="font-size: small" value="Linha:  #{jogador.ultimaJogada.linhaSelecionada} " />  
-                                Cor: <span style="height: 20px; width: 30px; #{tableBean.returnBackGroundColor(jogador)}; position: fixed" />  
+                                <h:outputText style="font-size: small" value="Nome: #{jogador.username}" />
+                                <h:outputText style="font-size: small" value="Pontos: #{jogador.pontuacao}" />
+                                <h:outputText style="font-size: small" value="Linha:  #{jogador.ultimaJogada.linhaSelecionada} " />
+                                Cor: <span style="height: 20px; width: 30px; #{tableBean.returnBackGroundColor(jogador)}; position: fixed" />
                             </p>
-                        </h:panelGrid>  
+                        </h:panelGrid>
 
-                    </p:carousel> 
+                    </p:carousel>
 
 
                     <p:socket channel="/informaFimExperimento" onMessage="showFinalDialog">
@@ -446,8 +446,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     </p:socket>
 
                     <p:dialog closable="false" id="finalExperimento" appendTo="@(body)"
-                              widgetVar="finalExp" width="500" height="200" resizable="false" 
-                              modal="true"  style="background-color: whitesmoke;" >  
+                              widgetVar="finalExp" width="500" height="200" resizable="false"
+                              modal="true"  style="background-color: whitesmoke;" >
                         <h:form id="form7">
                             <p:panel >
                                 <h:panelGrid columns="1" >
@@ -461,7 +461,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                     <p align="center">
                                         <p:commandButton id="finalizaExperimento" value="Finalizar"
                                                          action="#{navegacaoMB.irTelaFimExperimento()}"></p:commandButton>
-                                    </p>                 
+                                    </p>
                                 </h:panelGrid>
                             </p:panel>
                         </h:form>
@@ -474,7 +474,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                     <p:dialog closable="false" id="saidaJogador" appendTo="@(body)"
                               widgetVar="saidaJogador"
-                              width="500" height="200" resizable="false" modal="true"  style="background-color: whitesmoke;">  
+                              width="500" height="200" resizable="false" modal="true"  style="background-color: whitesmoke;">
                         <h:form id="form8">
                             <p:panel >
                                 <h:panelGrid columns="1" >
@@ -488,7 +488,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                     <p align="center">
                                         <p:commandButton id="finalizaParticipacao" value="Finalizar"
                                                          action="#{navegacaoMB.irTelaFimExperimento()}"></p:commandButton>
-                                    </p>                 
+                                    </p>
                                 </h:panelGrid>
                             </p:panel>
                         </h:form>
@@ -498,9 +498,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
             </p:layout>
 
-        </h:body>	
+        </h:body>
 
 
-    </f:view>  
+    </f:view>
 
 </html>
